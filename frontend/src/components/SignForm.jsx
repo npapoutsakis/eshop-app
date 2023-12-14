@@ -3,18 +3,25 @@ import "./SignForm.css";
 
 // i have to fetch data from keycloack api to see if the user is already registered
 function SignForm() {
-  const [status, setStatus] = useState(true);
-  const [selectedRole, setSelectedRole] = useState("");
+  const [isRegistered, setStatus] = useState(true);
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [selectedRole, setSelectedRole] = useState("");
 
   function handleClick() {
-    setStatus(!status);
+    setStatus(!isRegistered);
     setUsername("");
     setEmail("");
     setPassword("");
     setSelectedRole("");
+  }
+
+  function isUnchecked(e) {
+    if (!isRegistered && selectedRole === "") {
+      e.preventDefault();
+      alert("Please select a role!");
+    }
   }
 
   function handleRoleChange(event) {
@@ -23,7 +30,9 @@ function SignForm() {
 
   return (
     <div className="auth-container">
-      <h2 className="auth-heading">{status ? "Login" : "Create Account"}</h2>
+      <h2 className="auth-heading">
+        {isRegistered ? "Login" : "Create Account"}
+      </h2>
       <form className="auth-form">
         <input
           className="auth-input"
@@ -33,7 +42,7 @@ function SignForm() {
           onChange={(e) => setUsername(e.target.value)}
           required
         />
-        {!status && (
+        {!isRegistered && (
           <input
             className="auth-input"
             type="email"
@@ -51,36 +60,41 @@ function SignForm() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {status || (
+        {isRegistered || (
           <div className="role-selection">
-            <label>
-              <input
-                type="radio"
-                value="seller"
-                checked={selectedRole === "seller"}
-                onChange={handleRoleChange}
-              />
-              Seller
-            </label>
-            <label>
-              <input
-                type="radio"
-                value="customer"
-                checked={selectedRole === "customer"}
-                onChange={handleRoleChange}
-              />
-              Customer
-            </label>
+            <label className="role-label">Select Role:</label>
+            <div className="radio-options">
+              <label>
+                <input
+                  type="radio"
+                  value="seller"
+                  checked={selectedRole === "seller"}
+                  onChange={handleRoleChange}
+                />
+                Seller
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  value="customer"
+                  checked={selectedRole === "customer"}
+                  onChange={handleRoleChange}
+                />
+                Customer
+              </label>
+            </div>
           </div>
         )}
 
-        <button className="auth-button">{status ? "Login" : "Register"}</button>
+        <button onClick={isUnchecked} className="auth-button">
+          {isRegistered ? "Login" : "Register"}
+        </button>
       </form>
 
       <p className="toggle-mode">
-        {status ? "Not registered? " : "Already have an account? "}
+        {isRegistered ? "Not registered? " : "Already have an account? "}
         <span onClick={handleClick} className="toggle-link">
-          {status ? "Register here" : "Login here"}
+          {isRegistered ? "Register here" : "Login here"}
         </span>
       </p>
     </div>

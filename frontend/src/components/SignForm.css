@@ -59,7 +59,7 @@ body {
 .toggle-mode {
   color: #333;
   font-size: 14px;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .toggle-link {
@@ -79,11 +79,22 @@ body {
   margin-bottom: 15px;
 }
 
-.role-selection label {
-  flex: 1;
+.role-selection {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.role-label {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.radio-options label {
   margin-right: 10px;
 }
 
-.role-selection input {
+.radio-options input {
   margin-right: 5px;
 }
