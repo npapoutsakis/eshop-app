@@ -1,9 +1,12 @@
+import cors from "cors";
 import express from "express";
 const app = express();
-const port = 3000;
+const port = 5000;
+
+app.use(cors);
 
 app.get("/", (req, res) => {
-  res.send("<h1>Hello World!</h1>");
+  return res.send("<h1>Hello Nikos!</h1>");
 });
 
 app.listen(port, () => {
