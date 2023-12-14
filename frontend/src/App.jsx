@@ -1,11 +1,16 @@
 import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignForm from "./components/SignForm.jsx";
+import ProductPage from "./pages/ProductPage.jsx";
 
 function App() {
   return (
-    <div>
-      <SignForm />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SignForm />}></Route>
+        <Route path="/products" element={<ProductPage />}></Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
 
