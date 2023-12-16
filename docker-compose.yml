@@ -1,14 +1,19 @@
 version: "3.9"
 
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
+  postgres:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=keycloak
     ports:
-      - "3000:3000"
-    depends_on:
-      - keycloak
+      - "3306:3306"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - keycloak-postgres-network
 
   keycloak:
     image: jboss/keycloak
@@ -25,13 +30,23 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+    volumes:
+      - keycloak-data:/opt/jboss/keycloak/standalone/data
+    networks:
+      - keycloak-postgres-network
 
-  postgres:
-    image: postgres
-    restart: unless-stopped
-    environment:
-      - POSTGRES_DB=keycloak
-      - POSTGRES_USER=keycloak
-      - POSTGRES_PASSWORD=keycloak
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
-      - "5432:5432"
+      - "3000:3000"
+    depends_on:
+      - keycloak
+
+volumes:
+  postgres-data:
+  keycloak-data:
+
+networks:
+  keycloak-postgres-network:

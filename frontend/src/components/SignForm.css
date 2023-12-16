@@ -31,7 +31,9 @@ body {
   align-items: center;
 }
 
-.auth-input {
+#auth-input-pass,
+#auth-input-username,
+#auth-input-email {
   margin-bottom: 15px;
   padding: 12px;
   border: 1px solid #ccc;

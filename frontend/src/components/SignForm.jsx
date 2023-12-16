@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Login, Register } from "../utils/login.js";
 import "./SignForm.css";
 
 // i have to fetch data from keycloack api to see if the user is already registered
@@ -17,15 +18,29 @@ function SignForm() {
     setSelectedRole("");
   }
 
-  function isUnchecked(e) {
-    if (!isRegistered && selectedRole === "") {
-      e.preventDefault();
-      alert("Please select a role!");
-    }
-  }
-
   function handleRoleChange(event) {
     setSelectedRole(event.target.value);
+  }
+
+  async function triggerAction(event) {
+    if (!isRegistered && selectedRole === "") {
+      event.preventDefault();
+      alert("Please select a role!");
+    } else if (!isRegistered) {
+      try {
+        let group = "Sellers";
+        if (selectedRole === "Customer") group = "Customers";
+        await Register(event, username, email, password, group);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        await Login(event, username, password);
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 
   return (
@@ -35,7 +50,7 @@ function SignForm() {
       </h2>
       <form className="auth-form">
         <input
-          className="auth-input"
+          id="auth-input-username"
           type="text"
           placeholder="Username"
           value={username}
@@ -44,7 +59,7 @@ function SignForm() {
         />
         {!isRegistered && (
           <input
-            className="auth-input"
+            id="auth-input-email"
             type="email"
             placeholder="Email"
             value={email}
@@ -53,7 +68,7 @@ function SignForm() {
           />
         )}
         <input
-          className="auth-input"
+          id="auth-input-pass"
           type="password"
           placeholder="Password"
           value={password}
@@ -67,18 +82,20 @@ function SignForm() {
               <label>
                 <input
                   type="radio"
-                  value="seller"
-                  checked={selectedRole === "seller"}
+                  value="Seller"
+                  checked={selectedRole === "Seller"}
                   onChange={handleRoleChange}
+                  required
                 />
                 Seller
               </label>
               <label>
                 <input
                   type="radio"
-                  value="customer"
-                  checked={selectedRole === "customer"}
+                  value="Customer"
+                  checked={selectedRole === "Customer"}
                   onChange={handleRoleChange}
+                  required
                 />
                 Customer
               </label>
@@ -86,7 +103,7 @@ function SignForm() {
           </div>
         )}
 
-        <button onClick={isUnchecked} className="auth-button">
+        <button onClick={triggerAction} className="auth-button">
           {isRegistered ? "Login" : "Register"}
         </button>
       </form>
