@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Login, Register } from "../utils/login.js";
+import { Login, Logout, Register } from "../utils/login.js";
 import "./SignForm.css";
 
 // i have to fetch data from keycloack api to see if the user is already registered
@@ -26,18 +26,26 @@ function SignForm() {
     if (!isRegistered && selectedRole === "") {
       event.preventDefault();
       alert("Please select a role!");
-    } else if (!isRegistered) {
-      try {
+    } 
+    else if (!isRegistered) {
+      try 
+      {
         let group = "Sellers";
+        
         if (selectedRole === "Customer") group = "Customers";
+        
         await Register(event, username, email, password, group);
-      } catch (error) {
+      } 
+      catch (error) {
         console.log(error);
       }
-    } else {
-      try {
+    } 
+    else {
+      try 
+      {
         await Login(event, username, password);
-      } catch (error) {
+      } 
+      catch (error) {
         console.log(error);
       }
     }
@@ -114,6 +122,9 @@ function SignForm() {
           {isRegistered ? "Register here" : "Login here"}
         </span>
       </p>
+
+        <button onClick={Logout}> LOGOUT REEE!</button>
+
     </div>
   );
 }
