@@ -2,8 +2,7 @@
 
 export async function Register(event, username, email, password, role) {
   event.preventDefault();
-  try 
-  {
+  try {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -19,7 +18,10 @@ export async function Register(event, username, email, password, role) {
       redirect: "follow",
     };
 
-    const first_response = await fetch("http://localhost:8080/auth/realms/master/protocol/openid-connect/token", requestOptions);
+    const first_response = await fetch(
+      "http://localhost:8080/auth/realms/master/protocol/openid-connect/token",
+      requestOptions
+    );
 
     if (first_response.ok) {
       const adminAccessToken = await first_response.json();
@@ -57,23 +59,22 @@ export async function Register(event, username, email, password, role) {
         redirect: "follow",
       };
 
-      const register_user = await fetch("http://localhost:8080/auth/admin/realms/eshop/users", newRequestOptions);
+      const register_user = await fetch(
+        "http://localhost:8080/auth/admin/realms/eshop/users",
+        newRequestOptions
+      );
 
       if (register_user.ok) {
         console.log("Registration Succesfull");
         window.location.reload();
-      } 
-      else {
+      } else {
         console.log("error");
       }
-
-    } 
-    else {
+    } else {
       const error = await first_response.json();
       console.log(error);
     }
-  } 
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
 
@@ -82,8 +83,7 @@ export async function Register(event, username, email, password, role) {
 
 export async function Login(event, username, password) {
   event.preventDefault();
-  try 
-  {
+  try {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
 
@@ -101,7 +101,10 @@ export async function Login(event, username, password) {
       redirect: "follow",
     };
 
-    const response = await fetch("http://localhost:8080/auth/realms/eshop/protocol/openid-connect/token", requestOptions);
+    const response = await fetch(
+      "http://localhost:8080/auth/realms/eshop/protocol/openid-connect/token",
+      requestOptions
+    );
 
     if (response.ok) {
       const login = await response.json();
@@ -113,23 +116,19 @@ export async function Login(event, username, password) {
       localStorage.setItem("email", decodeToken.email);
       localStorage.setItem("role", decodeToken.realm_access.roles[0]);
       localStorage.setItem("refresh_token", logout_token);
-    }
-    else {
+    } else {
       const err = await response.json();
       console.log(err);
     }
-
-  } 
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
-  
+
   return;
 }
 
 export async function Logout() {
-  try 
-  {
+  try {
     // Construct request
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
@@ -146,16 +145,17 @@ export async function Logout() {
       redirect: "follow",
     };
 
-    const response = await fetch('http://localhost:8080/auth/realms/eshop/protocol/openid-connect/logout', requestOptions);
+    const response = await fetch(
+      "http://localhost:8080/auth/realms/eshop/protocol/openid-connect/logout",
+      requestOptions
+    );
 
-    if(response.ok) {
+    if (response.ok) {
       console.log("Logout Successfull");
       alert("Logout Successfull");
       localStorage.clear();
     }
-
-  } 
-  catch (error) {
+  } catch (error) {
     console.log(error);
   }
   return;
