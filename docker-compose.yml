@@ -43,6 +43,8 @@ services:
       - "3000:3000"
     depends_on:
       - keycloak
+    volumes:
+      - ./frontend:/app
 
 volumes:
   postgres-data:
