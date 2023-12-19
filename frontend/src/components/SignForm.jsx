@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Login, Logout, Register } from "../utils/login.js";
+import { Login, Register } from "../utils/login.js";
 import "./SignForm.css";
 
 // i have to fetch data from keycloack api to see if the user is already registered
@@ -11,6 +11,14 @@ function SignForm() {
   const [email, setEmail] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
   const navigate = useNavigate();
+
+  function handleLoggedIn() {
+    if (localStorage.getItem("isAuthenticated"))
+      return navigate(`/${localStorage.getItem("role").toLocaleLowerCase()}`);
+  }
+  useEffect(() => {
+    handleLoggedIn();
+  });
 
   function handleClick() {
     setStatus(!isRegistered);
@@ -35,14 +43,15 @@ function SignForm() {
         if (selectedRole === "Customer") group = "Customers";
 
         await Register(event, username, email, password, group);
+        //i can do some handling here to directly navigate
       } catch (error) {
         console.log(error);
       }
     } else {
       try {
         await Login(event, username, password);
-        if (localStorage.getItem("role") === "Seller") navigate("/seller");
-        else navigate("/customer");
+        // Redirect user to the corresponding url
+        navigate(`/${localStorage.getItem("role").toLocaleLowerCase()}`);
       } catch (error) {
         console.log(error);
       }
@@ -120,8 +129,6 @@ function SignForm() {
           {isRegistered ? "Register here" : "Login here"}
         </span>
       </p>
-
-      <button onClick={Logout}> LOGOUT REEE!</button>
     </div>
   );
 }

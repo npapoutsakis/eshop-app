@@ -11,9 +11,9 @@ function App() {
       <Routes>
         <Route path="/" element={<SignForm />} />
         <Route
-          path="/customer"
+          path="/customer/*"
           element={
-            <PrivateRoute>
+            <PrivateRoute requiredRole="Customer">
               <CustomerPage />
             </PrivateRoute>
           }
@@ -21,7 +21,7 @@ function App() {
         <Route
           path="/seller"
           element={
-            <PrivateRoute>
+            <PrivateRoute requiredRole="Seller">
               <SellerPage />
             </PrivateRoute>
           }
