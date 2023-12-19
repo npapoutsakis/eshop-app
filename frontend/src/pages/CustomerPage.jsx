@@ -3,7 +3,7 @@ import React from "react";
 function CustomerPage() {
   return (
     <div>
-      <h1>HELLO THERE AAUTHORISEDDDDDDDDDDDDDDDDDDDD</h1>
+      <h1>Welcome to Customer Page</h1>
     </div>
   );
 }

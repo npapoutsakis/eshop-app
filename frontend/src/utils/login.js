@@ -9,7 +9,7 @@ export async function Register(event, username, email, password, role) {
     var urlencoded = new URLSearchParams();
     urlencoded.append("grant_type", "client_credentials");
     urlencoded.append("client_id", "admin-cli");
-    urlencoded.append("client_secret", "NQvhU0n6cxW2yzw35UyqPdDUGSMH7MB2");
+    urlencoded.append("client_secret", "tec2Pi5Pm4nHNvI0ZZyI8Bunv7BHvUlm");
 
     var requestOptions = {
       method: "POST",
@@ -91,7 +91,7 @@ export async function Login(event, username, password) {
     urlencoded.append("username", username);
     urlencoded.append("password", password);
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "20E79hjTY4KPBP13QmckQf8CBM3c9LbQ");
+    urlencoded.append("client_secret", "Gi6fcKlXq18FXpHsoIlbXsuZH4tcwrRO");
     urlencoded.append("grant_type", "password");
 
     var requestOptions = {
@@ -114,8 +114,14 @@ export async function Login(event, username, password) {
       const decodeToken = await decodeJwt(token);
       localStorage.setItem("username", decodeToken.preferred_username);
       localStorage.setItem("email", decodeToken.email);
-      localStorage.setItem("role", decodeToken.realm_access.roles[0]);
+      localStorage.setItem(
+        "role",
+        decodeToken.realm_access.roles[0] === "Customer"
+          ? decodeToken.realm_access.roles[0]
+          : decodeToken.realm_access.roles[1]
+      );
       localStorage.setItem("refresh_token", logout_token);
+      localStorage.setItem("isAuthenticated", true);
     } else {
       const err = await response.json();
       console.log(err);
@@ -136,7 +142,7 @@ export async function Logout() {
     var urlencoded = new URLSearchParams();
     urlencoded.append("refresh_token", localStorage.getItem("refresh_token"));
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "20E79hjTY4KPBP13QmckQf8CBM3c9LbQ");
+    urlencoded.append("client_secret", "Gi6fcKlXq18FXpHsoIlbXsuZH4tcwrRO");
 
     var requestOptions = {
       method: "POST",
@@ -161,7 +167,7 @@ export async function Logout() {
   return;
 }
 
-function decodeJwt(jwtToken) {
+export function decodeJwt(jwtToken) {
   const base64Url = jwtToken.split(".")[1]; // Get the payload part of the JWT
   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Replace Base64 URL encoding characters
   const jsonPayload = decodeURIComponent(

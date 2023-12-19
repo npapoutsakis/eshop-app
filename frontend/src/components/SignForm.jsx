@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Login, Logout, Register } from "../utils/login.js";
 import "./SignForm.css";
 
@@ -9,6 +10,7 @@ function SignForm() {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [selectedRole, setSelectedRole] = useState("");
+  const navigate = useNavigate();
 
   function handleClick() {
     setStatus(!isRegistered);
@@ -26,26 +28,22 @@ function SignForm() {
     if (!isRegistered && selectedRole === "") {
       event.preventDefault();
       alert("Please select a role!");
-    } 
-    else if (!isRegistered) {
-      try 
-      {
+    } else if (!isRegistered) {
+      try {
         let group = "Sellers";
-        
+
         if (selectedRole === "Customer") group = "Customers";
-        
+
         await Register(event, username, email, password, group);
-      } 
-      catch (error) {
+      } catch (error) {
         console.log(error);
       }
-    } 
-    else {
-      try 
-      {
+    } else {
+      try {
         await Login(event, username, password);
-      } 
-      catch (error) {
+        if (localStorage.getItem("role") === "Seller") navigate("/seller");
+        else navigate("/customer");
+      } catch (error) {
         console.log(error);
       }
     }
@@ -123,8 +121,7 @@ function SignForm() {
         </span>
       </p>
 
-        <button onClick={Logout}> LOGOUT REEE!</button>
-
+      <button onClick={Logout}> LOGOUT REEE!</button>
     </div>
   );
 }
