@@ -19,7 +19,7 @@ function App() {
           }
         />
         <Route
-          path="/seller"
+          path="/seller/*"
           element={
             <PrivateRoute requiredRole="Seller">
               <SellerPage />

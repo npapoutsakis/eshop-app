@@ -158,7 +158,7 @@ export async function Logout() {
 
     if (response.ok) {
       console.log("Logout Successfull");
-      alert("Logout Successfull");
+      // alert("Logout Successfull");
       localStorage.clear();
     }
   } catch (error) {
