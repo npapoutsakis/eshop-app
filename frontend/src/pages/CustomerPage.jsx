@@ -12,9 +12,72 @@ function CustomerPage() {
   const navigate = useNavigate();
   const [loggedIn, setLoggedIn] = useState(true);
 
+  // After Logout() navigte to '/' page
   async function handleLogout() {
     await Logout();
     navigate("/");
+  }
+
+  // send api request for products
+  async function getProducts() {
+    try {
+      const response = await fetch("/api/products", { method: "GET" });
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  async function getProductById(id) {
+    try {
+      const response = await fetch("/api/products:id", { method: "GET" });
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  async function getProductByName(name) {
+    try {
+      const response = await fetch("/api/products:name", { method: "GET" });
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  async function getProductByUsername(username) {
+    try {
+      const response = await fetch("/api/products:username", { method: "GET" });
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.log(error);
+      return false;
+    }
+  }
+
+  // send request to get orders
+  async function getOrders(username) {
+    try {
+      const response = await fetch("/api/orders:username", { method: "GET" });
+      if (response.ok) {
+        return await response.json();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    return false;
   }
 
   // go directly to /products
