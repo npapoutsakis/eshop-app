@@ -6,9 +6,11 @@ body {
 }
 
 .customer-page {
+  flex-wrap: wrap;
+  justify-content: left;
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin-left: 100px;
+  margin-top: 35%;
 }
 
 header {
@@ -81,7 +83,7 @@ nav ul li button:hover {
 }
 
 .routes-container {
-  margin-top: 60px;
+  margin-top: 50rem;
   display: flex;
   justify-content: center;
 }

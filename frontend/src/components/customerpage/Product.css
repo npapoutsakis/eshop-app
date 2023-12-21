@@ -8,6 +8,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: box-shadow 0.3s ease-in-out;
   border-radius: 12px;
+  flex-basis: calc(20% - 100px);
 }
 
 .product:hover {
