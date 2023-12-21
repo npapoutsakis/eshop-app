@@ -9,7 +9,7 @@ services:
       - POSTGRES_USER=keycloak
       - POSTGRES_PASSWORD=keycloak
     ports:
-      - "3306:3306"
+      - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
@@ -34,6 +34,19 @@ services:
       - keycloak-data:/opt/jboss/keycloak/standalone/data
     networks:
       - keycloak-postgres-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=YOUR_PGADMIN_EMAIL
+      - PGADMIN_DEFAULT_PASSWORD=YOUR_PGADMIN_PASSWORD
+    ports:
+      - "5050:5050"
+    networks:
+      - keycloak-postgres-network
+    depends_on:
+      - postgres
 
   frontend:
     build:
