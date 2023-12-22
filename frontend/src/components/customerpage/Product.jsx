@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import "./Product.css";
 
 function Product({ image, name, price, info }) {
+  const [clickCount, setClickCount] = useState(0);
+
+  function handleAddToCart() {
+    setClickCount(clickCount + 1);
+  }
+
   return (
     <div className="product">
       <div className="product-wrapper">
@@ -9,7 +15,7 @@ function Product({ image, name, price, info }) {
         <h3>{name}</h3>
         <p>{info}</p>
         <p>Price: {price}€</p>
-        {/* Should add Button to add or remove for the cart */}
+        <button onClick={handleAddToCart}>Add to Cart ({clickCount})</button>
       </div>
     </div>
   );

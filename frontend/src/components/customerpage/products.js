@@ -1,5 +1,5 @@
 // DEMO
-// Products will be taken from the database
+// Products will be taken from the database using the api
 
 import photo from "../../assets/product/headset.jpg";
 

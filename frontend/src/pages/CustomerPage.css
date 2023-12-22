@@ -9,8 +9,10 @@ body {
   flex-wrap: wrap;
   justify-content: left;
   display: flex;
-  margin-left: 100px;
-  margin-top: 35%;
+  margin: 0 auto;
+  width: 90%;
+  height: 10vi;
+  min-height: 60vh;
 }
 
 header {
@@ -26,6 +28,11 @@ header {
   left: 0;
   display: flex; /* Ensure flex layout for header content */
   justify-content: space-between; /* Space elements evenly in the header */
+
+  @media (max-width: 768px) {
+    padding: 10px; /* Adjust padding for smaller screens */
+    height: fit-content;
+  }
 }
 
 .welcome-message {
@@ -33,6 +40,10 @@ header {
   font-size: 14px;
   margin-right: 15px;
   line-height: 0.5;
+  @media (max-width: 768px) {
+    font-size: 10px;
+    line-height: 1;
+  }
 }
 
 nav ul {
@@ -40,20 +51,27 @@ nav ul {
   margin: 0;
   padding: 0;
   display: flex;
+  @media (max-width: 768px) {
+    flex-direction: row;
+  }
 }
 
 nav ul li {
   margin-right: 30px;
   display: flex;
-  align-items: center; /* Align items vertically in the list */
+  align-items: center;
   height: 45px;
+  @media (max-width: 768px) {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
 }
 
 nav ul li a,
 nav ul li button {
   color: #fff;
   text-decoration: none;
-  padding: 10px 15px;
+  padding: 8px 15px;
   border-radius: 6px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -63,27 +81,34 @@ nav ul li button {
 
 nav ul li a:hover,
 nav ul li button:hover {
-  background-color: #3498db; /* Blue */
+  background-color: #3498db;
 }
 
-/* Improved styling for buttons */
 nav ul li button {
-  background-color: #e74c3c; /* Red */
+  background-color: #e74c3c;
   border: none;
   outline: none;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-right: 10px; /* Add space from the right */
+  margin-right: 10px;
 }
 
 nav ul li button:hover {
-  background-color: #c0392b; /* Darker red on hover */
+  background-color: #c0392b;
 }
 
 .routes-container {
-  margin-top: 50rem;
+  margin-top: 5rem;
   display: flex;
   justify-content: center;
+}
+
+@media (max-width: 768px) {
+  nav ul li a,
+  nav ul li button {
+    font-size: 14px;
+    margin-top: auto;
+  }
 }
