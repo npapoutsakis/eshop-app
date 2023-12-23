@@ -46,11 +46,14 @@ app.get("/api/products/:param", async (request, response) => {
 
     const db = await pool;
 
+    const client = db.connect();
+
     // Check if the parameter is a number
     if (!isNaN(parameter)) {
-      const result = await db.query("SELECT * FROM products WHERE id = $1", [
-        parameter,
-      ]);
+      const result = await client.query(
+        "SELECT * FROM products WHERE id = $1",
+        [parameter]
+      );
 
       response.send(result.rows);
     } else {
@@ -119,8 +122,10 @@ app.delete("/api/products/:id", async (request, response) => {
     const id = request.params.id;
     const db = await pool;
 
+    const client = await db.connect();
+
     // Execute the DELETE query
-    const result = await db.query(
+    const result = await client.query(
       "DELETE FROM products WHERE id = $1 RETURNING *",
       [id]
     );

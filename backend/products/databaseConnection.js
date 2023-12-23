@@ -26,9 +26,41 @@ async function connect() {
       )
     `;
 
+    const serialSet = `ALTER SEQUENCE products_id_seq RESTART WITH 1`;
+    const resetSequence = `SELECT pg_get_serial_sequence('products', 'id')`;
+
+    const orderIDTrigger = `CREATE OR REPLACE FUNCTION delete_and_update_sequence()
+    RETURNS TRIGGER AS $$
+    DECLARE
+        current_max_id INT;
+    BEGIN
+        -- Get the current maximum id
+        SELECT COALESCE(MAX(id), 0) INTO current_max_id FROM products;
+    
+        -- Update rows with id greater than the deleted id
+        UPDATE products SET id = id - 1 WHERE id > OLD.id;
+    
+        -- Reset the sequence
+        IF current_max_id <= 2147483647 THEN
+            EXECUTE 'SELECT setval(''products_id_seq'', ' || current_max_id || ')';
+        END IF;
+    
+        RETURN OLD;
+    END;
+    $$ LANGUAGE plpgsql;
+    
+    CREATE OR REPLACE TRIGGER update_products_id_sequence
+    AFTER DELETE ON products
+    FOR EACH ROW
+    EXECUTE FUNCTION delete_and_update_sequence();
+    `;
+
     const client = await pool.connect();
     try {
       await client.query(createTableQuery);
+      await client.query(serialSet);
+      await client.query(resetSequence);
+      await client.query(orderIDTrigger);
     } finally {
       client.release();
     }
