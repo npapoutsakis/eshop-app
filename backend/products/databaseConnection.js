@@ -38,16 +38,22 @@ async function connect() {
         SELECT COALESCE(MAX(id), 0) INTO current_max_id FROM products;
     
         -- Update rows with id greater than the deleted id
-        UPDATE products SET id = id - 1 WHERE id > OLD.id;
+        IF current_max_id > OLD.id THEN
+            UPDATE products SET id = id - 1 WHERE id > OLD.id AND id <> OLD.id;
+        END IF;
     
-        -- Reset the sequence
-        IF current_max_id <= 2147483647 THEN
+        -- Reset the sequence only if there are remaining products
+        IF current_max_id > 1 THEN
             EXECUTE 'SELECT setval(''products_id_seq'', ' || current_max_id || ')';
+        ELSE
+            -- If no remaining products, reset the sequence to 1
+            EXECUTE 'SELECT setval(''products_id_seq'', 1)';
         END IF;
     
         RETURN OLD;
     END;
     $$ LANGUAGE plpgsql;
+
     
     CREATE OR REPLACE TRIGGER update_products_id_sequence
     AFTER DELETE ON products

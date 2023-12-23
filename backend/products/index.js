@@ -1,5 +1,5 @@
 import cors from "cors";
-import express, { Router, response } from "express";
+import express from "express";
 import pool from "./databaseConnection.js";
 
 const app = express();
@@ -24,7 +24,7 @@ app.get("/api/products", async (request, response) => {
 
     try {
       // Execute the query
-      const results = await client.query("SELECT * FROM products");
+      const results = await client.query("SELECT * FROM products ORDER BY id");
 
       // Send the results
       response.json(results.rows);
@@ -46,14 +46,11 @@ app.get("/api/products/:param", async (request, response) => {
 
     const db = await pool;
 
-    const client = db.connect();
-
     // Check if the parameter is a number
     if (!isNaN(parameter)) {
-      const result = await client.query(
-        "SELECT * FROM products WHERE id = $1",
-        [parameter]
-      );
+      const result = await db.query("SELECT * FROM products WHERE id = $1", [
+        parameter,
+      ]);
 
       response.send(result.rows);
     } else {
@@ -80,9 +77,7 @@ app.post("/api/products", async (request, response) => {
   try {
     const db = await pool;
 
-    const client = await db.connect();
-
-    const result = await client.query(
+    const result = await db.query(
       "INSERT INTO products (title, img, price, quantity, user_product) VALUES ($1, $2, $3, $4, $5) RETURNING *",
       [
         product.title,
@@ -103,12 +98,36 @@ app.post("/api/products", async (request, response) => {
 // UPDATE - SELLER
 // Update product on database
 app.put("/api/products/:id", async (request, response) => {
+  // dont change name of seller, doesnt make sense
   try {
     const id = request.params.id;
+    const { title, img, price, quantity } = request.body;
 
     const db = await pool;
+    // const client = db.connect();
 
-    // const result = await db.query();
+    const updateQuery = `
+      UPDATE products
+      SET title = $1, img = $2, price = $3, quantity = $4
+      WHERE id = $5
+    `;
+
+    const result = await db.query(updateQuery, [
+      title,
+      img,
+      price,
+      quantity,
+      id,
+    ]);
+
+    // Check if the update was successful
+    if (result.rowCount > 0) {
+      response.json({ message: "Product updated successfully" });
+    } else {
+      response.status(404).json({ error: "Product not found" });
+    }
+
+    // client.release();
   } catch (error) {
     console.error("Error updating product:", error);
     response.status(500).json({ error: "Internal Server Error" });
@@ -122,10 +141,8 @@ app.delete("/api/products/:id", async (request, response) => {
     const id = request.params.id;
     const db = await pool;
 
-    const client = await db.connect();
-
     // Execute the DELETE query
-    const result = await client.query(
+    const result = await db.query(
       "DELETE FROM products WHERE id = $1 RETURNING *",
       [id]
     );
