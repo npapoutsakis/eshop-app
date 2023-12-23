@@ -1,39 +1,39 @@
 version: "3.9"
 
 services:
-  # postgres:
-  #   image: postgres
-  #   restart: unless-stopped
-  #   environment:
-  #     - POSTGRES_DB=keycloak
-  #     - POSTGRES_USER=keycloak
-  #     - POSTGRES_PASSWORD=keycloak
-  #   ports:
-  #     - "5432:5432"
-  #   volumes:
-  #     - postgres-data:/var/lib/postgresql/data
-  #   networks:
-  #     - keycloak-postgres-network
+  postgres:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=keycloak
+      - POSTGRES_USER=keycloak
+      - POSTGRES_PASSWORD=keycloak
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - keycloak-postgres-network
 
-  # keycloak:
-  #   image: jboss/keycloak
-  #   restart: unless-stopped
-  #   environment:
-  #     - KEYCLOAK_USER=admin
-  #     - KEYCLOAK_PASSWORD=admin
-  #     - DB_VENDOR=postgres
-  #     - DB_ADDR=postgres
-  #     - DB_DATABASE=keycloak
-  #     - DB_USER=keycloak
-  #     - DB_PASSWORD=keycloak
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     - postgres
-  #   volumes:
-  #     - keycloak-data:/opt/jboss/keycloak/standalone/data
-  #   networks:
-  #     - keycloak-postgres-network
+  keycloak:
+    image: jboss/keycloak
+    restart: unless-stopped
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+      - DB_VENDOR=postgres
+      - DB_ADDR=postgres
+      - DB_DATABASE=keycloak
+      - DB_USER=keycloak
+      - DB_PASSWORD=keycloak
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    volumes:
+      - keycloak-data:/opt/jboss/keycloak/standalone/data
+    networks:
+      - keycloak-postgres-network
 
   pgadmin:
     image: dpage/pgadmin4
@@ -45,10 +45,11 @@ services:
     ports:
       - "5050:80"
     networks:
-      # - keycloak-postgres-network
+      - keycloak-postgres-network
       - products
     depends_on:
       - products_db
+      - postgres
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 
@@ -72,20 +73,20 @@ services:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
     ports:
-      - "3310:3306"
+      - "3310:5432"
     expose:
       - 3310
     networks:
       - products
     volumes:
-      - ./data/products-db:/var/lib/postgresql/data
+      - products-db-data:/var/lib/postgresql/data
 
 volumes:
-  # postgres-data:
-  # keycloak-data:
+  postgres-data:
+  keycloak-data:
   pgadmin-data:
-  products_db:
+  products-db-data:
 
 networks:
-  # keycloak-postgres-network:
+  keycloak-postgres-network:
   products:
