@@ -1,7 +1,7 @@
 import cors from "cors";
 import express, { response } from "express";
 import pool from "./databaseConnection.js";
-import kafka, { sendOrders } from "./kafka.js";
+import { sendOrders } from "./kafka.js";
 
 const app = express();
 const port = 5500;
@@ -47,7 +47,7 @@ app.post("/api/orders", async (request, response) => {
     // have to send message to product-service
     const orderMessage = {
       id: result.rows[0].id,
-      products: JSON.stringify(products),
+      products: products,
     };
 
     console.log(orderMessage);
@@ -57,7 +57,7 @@ app.post("/api/orders", async (request, response) => {
 
     response.send(result.rows[0]);
   } catch (error) {
-    console.log(error);
+    console.error("Error processing order:", error);
     response.status(500).json({ error: "Internal Server Error" });
   }
 });

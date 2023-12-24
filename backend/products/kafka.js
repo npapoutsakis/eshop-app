@@ -3,7 +3,7 @@ import handleProducts from "./handleProducts.js";
 
 // Initialize kafka client for product service
 const kafka = new Kafka({
-  clientId: "products-app",
+  clientId: "product-app",
   brokers: ["localhost:8097"],
   retry: {
     initialRetryTime: 2000,
@@ -46,37 +46,34 @@ async function fetchProductsFromOrderTopic() {
 
     await consumer.run({
       eachMessage: async ({ message }) => {
-        const jsonMsg = JSON.parse(message.value);
-        const result = await handleProducts(jsonMsg);
-
-        // now we have to return a success of reject for the order
-        if (result) {
-          const message = {
+        try {
+          const result = await handleProducts(jsonMsg);
+          const statusMessage = {
             id: jsonMsg.id,
-            status: "Success",
+            status: result ? "Success" : "Rejected",
           };
-
-          // connect the producer and send a message to order-service
-          await sendOrders(message);
-        } else {
-          const message = {
-            id: jsonMsg.id,
-            status: "Rejected",
-          };
-
-          await sendOrders(message);
+          console.log("Processing successful:", statusMessage);
+          await sendOrders(statusMessage);
+        } catch (error) {
+          console.error("Error processing message:", error.message);
         }
       },
     });
-
-    await consumer.disconnect();
   } catch (error) {
+    console.error("Error in fetchProductsFromOrderTopic:", error.message);
+  } finally {
     await consumer.disconnect();
-    console.log(error.message);
   }
 }
 
-// add a delay of 2s to fetch correctly
+// (async () => {
+//   try {
+//     await fetchProductsFromOrderTopic();
+//   } catch (error) {
+//     console.error("Error in main execution:", error.message);
+//   }
+// })();
+
 setTimeout(async () => {
   try {
     await fetchProductsFromOrderTopic();

@@ -18,7 +18,10 @@ const producer = kafka.producer({
 });
 
 export async function sendOrders(msg) {
+  console.log("Before producer connect");
   await producer.connect();
+  console.log("After producer connect");
+
   await producer.send({
     topic: "ordersProducer",
     messages: [
@@ -27,8 +30,10 @@ export async function sendOrders(msg) {
       },
     ],
   });
+  console.log("After producer send");
 
   await producer.disconnect();
+  console.log("After producer disconnect");
 }
 
 // init order-service consumer
@@ -37,35 +42,38 @@ const consumer = kafka.consumer({
   allowAutoTopicCreation: true,
 });
 
+// Check order status and handle orders
 async function checkOrderStatus() {
   try {
+    console.log("Before consumer connect");
     await consumer.connect();
+    console.log("After consumer connect");
+
     await consumer.subscribe({ topics: ["productsProducer"] });
+    console.log("After consumer subscribe");
 
     await consumer.run({
       eachMessage: async ({ message }) => {
         const jsonMsg = JSON.parse(message.value);
 
-        // handle the order (setting correct status)
+        // Handle the order (setting correct status)
         await handleOrder(jsonMsg);
       },
     });
-
-    await consumer.disconnect();
+    console.log("After consumer subscribe");
   } catch (error) {
+    console.error("Error in checkOrderStatus:", error.message);
+  } finally {
     await consumer.disconnect();
-    console.log(error.message);
   }
-  return;
 }
 
-// add a delay of 2s to check correctly
-setTimeout(async () => {
+(async () => {
   try {
     await checkOrderStatus();
   } catch (error) {
-    console.log(error.message);
+    console.error("Error in main execution:", error.message);
   }
-}, 2000);
+})();
 
 export default kafka;
