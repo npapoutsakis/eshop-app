@@ -2,6 +2,7 @@ version: "3.9"
 
 services:
   postgres:
+    container_name: keycloak-db
     image: postgres
     restart: unless-stopped
     environment:
@@ -47,31 +48,33 @@ services:
     networks:
       - keycloak-postgres-network
       - products
+      - orders
     depends_on:
       - products_db
+      - orders_db
       - postgres
     volumes:
       - pgadmin-data:/var/lib/pgadmin
 
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - keycloak
-  #   volumes:
-  #     - ./frontend:/app
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - keycloak
+    volumes:
+      - frontend-app:/app
 
   products_db:
     container_name: products_db
     image: postgres
     restart: always
     environment:
-      POSTGRES_DB: products_db
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      - POSTGRES_DB=products_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
     ports:
       - "3310:5432"
     expose:
@@ -81,12 +84,32 @@ services:
     volumes:
       - products-db-data:/var/lib/postgresql/data
 
+  orders_db:
+    container_name: orders_db
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=orders_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "3308:5432"
+    expose:
+      - 3308
+    networks:
+      - orders
+    volumes:
+      - orders-db-data:/var/lib/postgresql/data
+
 volumes:
   postgres-data:
   keycloak-data:
   pgadmin-data:
   products-db-data:
+  orders-db-data:
+  frontend-app:
 
 networks:
   keycloak-postgres-network:
   products:
+  orders:

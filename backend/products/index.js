@@ -104,7 +104,6 @@ app.put("/api/products/:id", async (request, response) => {
     const { title, img, price, quantity } = request.body;
 
     const db = await pool;
-    // const client = db.connect();
 
     const updateQuery = `
       UPDATE products
@@ -164,5 +163,5 @@ app.delete("/api/products/:id", async (request, response) => {
 
 // LISTEN
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Products Server is running on http://localhost:${port}`);
 });
