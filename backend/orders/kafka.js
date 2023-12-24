@@ -1,4 +1,4 @@
-import Kafka, { Partitioners } from "kafkajs";
+import { Kafka, Partitioners } from "kafkajs";
 import handleOrder from "./handleOrder.js";
 
 // Initialize kafka client for order service
@@ -17,7 +17,7 @@ const producer = kafka.producer({
   createPartitioner: Partitioners.LegacyPartitioner,
 });
 
-async function sendOrders(msg) {
+export async function sendOrders(msg) {
   await producer.connect();
   await producer.send({
     topic: "ordersProducer",
@@ -37,13 +37,13 @@ const consumer = kafka.consumer({
   allowAutoTopicCreation: true,
 });
 
-async function checkOrderStatus(message) {
+async function checkOrderStatus() {
   try {
     await consumer.connect();
     await consumer.subscribe({ topics: ["productsProducer"] });
 
     await consumer.run({
-      eachMessage: async ({ message, heartbeat }) => {
+      eachMessage: async ({ message }) => {
         const jsonMsg = JSON.parse(message.value);
 
         // handle the order (setting correct status)
@@ -59,7 +59,13 @@ async function checkOrderStatus(message) {
   return;
 }
 
-module.exports = {
-  kafkaProducer: sendOrders,
-  kafkaConsumer: checkOrderStatus,
-};
+// add a delay of 2s to check correctly
+setTimeout(async () => {
+  try {
+    await checkOrderStatus();
+  } catch (error) {
+    console.log(error.message);
+  }
+}, 2000);
+
+export default kafka;

@@ -12,7 +12,7 @@ async function handleProducts(order) {
       ]);
 
       const quantity = data.rows[0].quantity;
-      if (quantity && quantity < obj.amount) {
+      if (quantity < obj.amount) {
         return false;
       }
     }

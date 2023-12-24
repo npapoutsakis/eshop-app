@@ -1,7 +1,7 @@
 import cors from "cors";
 import express, { response } from "express";
 import pool from "./databaseConnection.js";
-import kafka from "./kafka.js";
+import kafka, { sendOrders } from "./kafka.js";
 
 const app = express();
 const port = 5500;
@@ -35,13 +35,13 @@ app.get("/api/orders/:username", async (request, response) => {
 
 // POST - CUSTOMER
 app.post("/api/orders", async (request, response) => {
-  const { products, status, total_price, user_username } = request.body;
+  const { products, total_price, user_username } = request.body;
   try {
     const db = await pool;
 
     const result = await db.query(
       "INSERT INTO orders (products, total_price, status, user_username) VALUES ($1, $2, $3, $4) RETURNING *",
-      [JSON.stringify(products), total_price, status, user_username]
+      [JSON.stringify(products), total_price, "Pending", user_username]
     );
 
     // have to send message to product-service
@@ -50,9 +50,12 @@ app.post("/api/orders", async (request, response) => {
       products: JSON.stringify(products),
     };
 
-    await kafka.kafkaProducer(orderMessage);
+    console.log(orderMessage);
 
-    response.send(result);
+    // sending the order for checking
+    await sendOrders(orderMessage);
+
+    response.send(result.rows[0]);
   } catch (error) {
     console.log(error);
     response.status(500).json({ error: "Internal Server Error" });

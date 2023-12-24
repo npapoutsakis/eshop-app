@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import pool from "./databaseConnection.js";
+import kafka from "./kafka.js";
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -125,8 +126,6 @@ app.put("/api/products/:id", async (request, response) => {
     } else {
       response.status(404).json({ error: "Product not found" });
     }
-
-    // client.release();
   } catch (error) {
     console.error("Error updating product:", error);
     response.status(500).json({ error: "Internal Server Error" });

@@ -84,3 +84,5 @@ setTimeout(async () => {
     console.log(error.message);
   }
 }, 2000);
+
+export default kafka;
