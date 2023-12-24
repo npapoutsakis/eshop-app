@@ -1,6 +1,7 @@
 import cors from "cors";
 import express, { response } from "express";
 import pool from "./databaseConnection.js";
+import kafka from "./kafka.js";
 
 const app = express();
 const port = 5500;
@@ -38,10 +39,18 @@ app.post("/api/orders", async (request, response) => {
   try {
     const db = await pool;
 
-    const result = db.query(
+    const result = await db.query(
       "INSERT INTO orders (products, total_price, status, user_username) VALUES ($1, $2, $3, $4) RETURNING *",
       [JSON.stringify(products), total_price, status, user_username]
     );
+
+    // have to send message to product-service
+    const orderMessage = {
+      id: result.rows[0].id,
+      products: JSON.stringify(products),
+    };
+
+    await kafka.kafkaProducer(orderMessage);
 
     response.send(result);
   } catch (error) {

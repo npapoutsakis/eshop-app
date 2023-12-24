@@ -59,4 +59,7 @@ async function checkOrderStatus(message) {
   return;
 }
 
-export { checkOrderStatus, sendOrders };
+module.exports = {
+  kafkaProducer: sendOrders,
+  kafkaConsumer: checkOrderStatus,
+};
