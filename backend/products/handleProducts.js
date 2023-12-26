@@ -3,7 +3,7 @@ import pool from "./databaseConnection.js";
 // This function will update products on database when a new order is made
 async function handleProducts(order) {
   try {
-    const db = await pool.connect();
+    const db = await pool;
 
     // Check if products amount is > 0
     for await (const obj of order.products) {

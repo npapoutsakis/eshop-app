@@ -17,10 +17,8 @@ const producer = kafka.producer({
   createPartitioner: Partitioners.LegacyPartitioner,
 });
 
-export async function sendOrders(msg) {
-  console.log("Before producer connect");
+async function sendOrders(msg) {
   await producer.connect();
-  console.log("After producer connect");
 
   await producer.send({
     topic: "ordersProducer",
@@ -30,10 +28,8 @@ export async function sendOrders(msg) {
       },
     ],
   });
-  console.log("After producer send");
 
   await producer.disconnect();
-  console.log("After producer disconnect");
 }
 
 // init order-service consumer
@@ -45,35 +41,32 @@ const consumer = kafka.consumer({
 // Check order status and handle orders
 async function checkOrderStatus() {
   try {
-    console.log("Before consumer connect");
     await consumer.connect();
-    console.log("After consumer connect");
 
     await consumer.subscribe({ topics: ["productsProducer"] });
-    console.log("After consumer subscribe");
 
     await consumer.run({
       eachMessage: async ({ message }) => {
         const jsonMsg = JSON.parse(message.value);
 
+        console.log(jsonMsg);
+
         // Handle the order (setting correct status)
         await handleOrder(jsonMsg);
       },
     });
-    console.log("After consumer subscribe");
   } catch (error) {
-    console.error("Error in checkOrderStatus:", error.message);
-  } finally {
     await consumer.disconnect();
+    console.error("Error in checkOrderStatus:", error.message);
   }
 }
 
-(async () => {
+setTimeout(async () => {
   try {
     await checkOrderStatus();
   } catch (error) {
-    console.error("Error in main execution:", error.message);
+    console.log(error.message);
   }
-})();
+}, 1000);
 
-export default kafka;
+export { sendOrders };

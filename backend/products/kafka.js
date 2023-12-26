@@ -20,6 +20,7 @@ const producer = kafka.producer({
 // send orders to order-service
 async function sendOrders(msg) {
   await producer.connect();
+
   await producer.send({
     topic: "productsProducer",
     messages: [
@@ -46,33 +47,25 @@ async function fetchProductsFromOrderTopic() {
 
     await consumer.run({
       eachMessage: async ({ message }) => {
-        try {
-          const result = await handleProducts(jsonMsg);
-          const statusMessage = {
-            id: jsonMsg.id,
-            status: result ? "Success" : "Rejected",
-          };
-          console.log("Processing successful:", statusMessage);
-          await sendOrders(statusMessage);
-        } catch (error) {
-          console.error("Error processing message:", error.message);
-        }
+        const jsonMsg = JSON.parse(message.value);
+
+        console.log(jsonMsg);
+        const result = await handleProducts(jsonMsg);
+
+        const statusMessage = {
+          id: jsonMsg.id,
+          status: result ? "Success" : "Rejected",
+        };
+
+        // Pass the order status to order service
+        await sendOrders(statusMessage);
       },
     });
   } catch (error) {
-    console.error("Error in fetchProductsFromOrderTopic:", error.message);
-  } finally {
     await consumer.disconnect();
+    console.error("Error in fetchProductsFromOrderTopic:", error.message);
   }
 }
-
-// (async () => {
-//   try {
-//     await fetchProductsFromOrderTopic();
-//   } catch (error) {
-//     console.error("Error in main execution:", error.message);
-//   }
-// })();
 
 setTimeout(async () => {
   try {
@@ -80,6 +73,6 @@ setTimeout(async () => {
   } catch (error) {
     console.log(error.message);
   }
-}, 2000);
+}, 1000);
 
 export default kafka;

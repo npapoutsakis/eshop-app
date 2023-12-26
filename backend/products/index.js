@@ -1,6 +1,7 @@
 import cors from "cors";
 import express from "express";
 import pool from "./databaseConnection.js";
+import kafka from "./kafka.js";
 
 const app = express();
 const port = process.env.PORT || 5000;

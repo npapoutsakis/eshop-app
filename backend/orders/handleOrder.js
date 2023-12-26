@@ -4,7 +4,7 @@ import pool from "./databaseConnection.js";
 async function handleOrder(order) {
   try {
     const { id, status } = order;
-    const db = await pool.connect();
+    const db = await pool;
 
     // just make the query and update the table orders
     await db.query("UPDATE orders SET status = $1 WHERE id = $2", [status, id]);
