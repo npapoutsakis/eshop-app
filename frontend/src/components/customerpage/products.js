@@ -6,21 +6,21 @@ import photo from "../../assets/product/headset.jpg";
 const products = [
   {
     id: 1,
-    name: "Headset",
+    name: "Headset1",
     image: { photo },
     price: 19.99,
     info: "This is info",
   },
   {
     id: 2,
-    name: "Headset",
+    name: "Headset2",
     image: { photo },
     price: 19.99,
     info: "This is info",
   },
   {
     id: 3,
-    name: "Headset",
+    name: "Alex",
     image: { photo },
     price: 19.99,
     info: "This is info",
