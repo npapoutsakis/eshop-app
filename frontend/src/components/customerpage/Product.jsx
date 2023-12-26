@@ -13,7 +13,6 @@ function Product({ image, name, price, info }) {
       <div className="product-wrapper">
         <img src={image} alt={name} />
         <h3>{name}</h3>
-        <p>{info}</p>
         <p>Price: {price}€</p>
         <button onClick={handleAddToCart}>Add to Cart ({clickCount})</button>
       </div>

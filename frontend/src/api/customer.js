@@ -1,3 +1,5 @@
+// Customer functions
+
 const url = "http://localhost:";
 const orderPort = 5500;
 const productsPort = 5000;
@@ -73,8 +75,24 @@ async function getOrders(username) {
     }
   } catch (error) {
     console.log(error);
+    return false;
   }
-  return false;
+}
+
+// post an order, send to order-service
+async function makeOrder(data) {
+  try {
+    const response = await fetch(url + orderPort + "/api/orders:", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    if (response.ok) {
+      return await response.json();
+    }
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
 export {
@@ -83,4 +101,5 @@ export {
   getProductByName,
   getProductByUsername,
   getProducts,
+  makeOrder,
 };
