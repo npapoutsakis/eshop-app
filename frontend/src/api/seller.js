@@ -19,10 +19,11 @@ async function addProduct(data) {
 }
 
 //update product with id
-async function updateProduct(id) {
+async function updateProduct(id, data) {
   try {
     const response = await fetch(url + "/:" + id, {
       method: "PUT",
+      body: JSON.stringify(data),
     });
     if (response.ok) {
       return await response.json();

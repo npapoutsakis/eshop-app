@@ -122,6 +122,19 @@ services:
     volumes:
       - ./frontend:/app
 
+  products-service:
+    build:
+      context: ./backend/products
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/products:/app
+    depends_on:
+      - products_db
+    networks:
+      - products
+
   products_db:
     container_name: products_db
     image: postgres
@@ -138,6 +151,19 @@ services:
       - products
     volumes:
       - products-db-data:/var/lib/postgresql/data
+
+  orders-service:
+    build:
+      context: ./backend/orders
+      dockerfile: Dockerfile
+    ports:
+      - "5500:5500"
+    volumes:
+      - ./backend/orders:/app
+    depends_on:
+      - orders_db
+    networks:
+      - orders
 
   orders_db:
     container_name: orders_db

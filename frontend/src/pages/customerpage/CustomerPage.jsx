@@ -50,7 +50,6 @@ function CustomerPage() {
   };
 
   // Filter products based on search term
-  // Filter products based on search term
   const filteredProducts = products.filter(
     (product) =>
       (product.title ?? "")
@@ -85,7 +84,7 @@ function CustomerPage() {
         </nav>
       </header>
 
-      {location.pathname.includes("/products") && (
+      {/* {location.pathname.includes("/products") && (
         <div className="search-bar">
           <input
             type="text"
@@ -94,7 +93,7 @@ function CustomerPage() {
             onChange={handleSearchChange}
           />
         </div>
-      )}
+      )} */}
 
       <Routes>
         <Route
@@ -105,7 +104,6 @@ function CustomerPage() {
               name={product.title}
               image={product.img}
               price={product.price}
-              // info={product.user_product}
             />
           ))}
         />
