@@ -10,7 +10,7 @@ import { getProducts } from "../../api/customer";
 import Cart from "../../components/customerpage/Cart";
 import Order from "../../components/customerpage/Order";
 import Product from "../../components/customerpage/Product";
-// import products from "../../components/customerpage/products";
+
 import { Logout } from "../../utils/login";
 import "./CustomerPage.css";
 
@@ -108,7 +108,10 @@ function CustomerPage() {
           ))}
         />
         <Route path="cart" element={<Cart />} />
-        <Route path="orders" element={<Order />} />
+        <Route
+          path="orders"
+          element={<Order username={localStorage.getItem("username")} />}
+        />
       </Routes>
     </div>
   );
