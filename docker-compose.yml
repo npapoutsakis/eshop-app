@@ -1,6 +1,44 @@
 version: "3.9"
 
 services:
+  orders_db:
+    container_name: orders_db
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=orders_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "3308:5432"
+    expose:
+      - 3308
+    networks:
+      - orders
+    volumes:
+      - orders-db-data:/var/lib/postgresql/data
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+
+  products_db:
+    container_name: products_db
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_DB=products_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "3310:5432"
+    expose:
+      - 3310
+    networks:
+      - products
+    volumes:
+      - products-db-data:/var/lib/postgresql/data
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.2.1
     container_name: zookeeper
@@ -36,6 +74,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+    extra_hosts:
+      - "host.docker.internal:172.17.0.2"
 
   control-center:
     image: confluentinc/cp-enterprise-control-center:latest
@@ -55,6 +95,8 @@ services:
     networks:
       - default
     restart: always
+    volumes:
+      - control-center-data:/var/lib/confluent-control-center
 
   postgres:
     container_name: keycloak-db
@@ -92,6 +134,7 @@ services:
       - keycloak-postgres-network
 
   pgadmin:
+    container_name: pgadmin4
     image: dpage/pgadmin4
     restart: unless-stopped
     environment:
@@ -112,6 +155,7 @@ services:
       - pgadmin-data:/var/lib/pgadmin
 
   frontend:
+    container_name: frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -123,6 +167,8 @@ services:
       - ./frontend:/app
 
   products-service:
+    container_name: products-server
+    restart: always
     build:
       context: ./backend/products
       dockerfile: Dockerfile
@@ -132,55 +178,29 @@ services:
       - ./backend/products:/app
     depends_on:
       - products_db
+      - zookeeper
+      - kafka
     networks:
       - products
-
-  products_db:
-    container_name: products_db
-    image: postgres
-    restart: always
-    environment:
-      - POSTGRES_DB=products_db
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-    ports:
-      - "3310:5432"
-    expose:
-      - 3310
-    networks:
-      - products
-    volumes:
-      - products-db-data:/var/lib/postgresql/data
 
   orders-service:
+    container_name: orders-server
+    restart: always
     build:
       context: ./backend/orders
       dockerfile: Dockerfile
     ports:
       - "5500:5500"
+    environment:
+      - PORT=5500
     volumes:
       - ./backend/orders:/app
     depends_on:
       - orders_db
+      - zookeeper
+      - kafka
     networks:
       - orders
-
-  orders_db:
-    container_name: orders_db
-    image: postgres
-    restart: always
-    environment:
-      - POSTGRES_DB=orders_db
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-    ports:
-      - "3308:5432"
-    expose:
-      - 3308
-    networks:
-      - orders
-    volumes:
-      - orders-db-data:/var/lib/postgresql/data
 
 volumes:
   postgres-data:
@@ -189,6 +209,7 @@ volumes:
   products-db-data:
   orders-db-data:
   frontend-app:
+  control-center-data:
 
 networks:
   default:

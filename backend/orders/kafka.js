@@ -4,7 +4,7 @@ import handleOrder from "./handleOrder.js";
 // Initialize kafka client for order service
 const kafka = new Kafka({
   clientId: "order-app",
-  brokers: ["localhost:8097"],
+  brokers: ["kafka:19092"],
   retry: {
     initialRetryTime: 2000,
     retries: 5,
