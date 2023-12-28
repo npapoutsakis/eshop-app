@@ -13,20 +13,20 @@ function Cart() {
 
   return (
     <div className="cart">
-      <div>
+      <div style={{ marginTop: "100px" }}>
         <h1>Your Cart Items</h1>
       </div>
       <div className="cart">
         {PRODUCTS.map((product) => {
           if (cartItems[product.id] !== 0) {
-            return <CartItem data={product} />;
+            return <CartItem key={product.id} data={product} />;
           } else return <></>;
         })}
       </div>
 
       {totalAmount > 0 ? (
         <div className="checkout">
-          <p> Subtotal: ${totalAmount} </p>
+          <p> Subtotal: {totalAmount} € </p>
           <button onClick={() => navigate("/customer/products")}>
             {" "}
             Continue Shopping{" "}
@@ -34,7 +34,8 @@ function Cart() {
           <button
             onClick={() => {
               emptyCart();
-              navigate("/checkout");
+              alert("Order Send!");
+              navigate("/customer/products");
             }}
           >
             Order Now!

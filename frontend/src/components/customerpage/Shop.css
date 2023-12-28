@@ -6,9 +6,11 @@
 .products {
   width: 100%;
   height: auto;
-  display: grid;
+  display: flex;
   grid-template-columns: 1fr 1fr 1fr;
   place-items: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }
 
 .product {
@@ -51,4 +53,18 @@
   background-color: rgb(19, 19, 19);
   color: white;
   cursor: pointer;
+}
+
+.searchBar {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.searchBar input {
+  padding: 10px;
+  font-size: 16px;
+  width: 300px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-right: 10px;
 }
