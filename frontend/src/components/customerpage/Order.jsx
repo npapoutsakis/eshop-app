@@ -1,17 +1,22 @@
+import { ArrowRight, Package } from "phosphor-react";
 import React from "react";
 import "./Order.css";
 
 function Order({ order }) {
   return (
-    <div className="cart">
-      <div className="cartItem">
+    <div className="order">
+      <div className="orderItem">
         <div className="description">
-          <h2>Order #{order.id}</h2>
-
+          <div className="header">
+            <Package size={32} weight="bold" />
+            <h2>Order No.{order.id}</h2>
+          </div>
           <ul>
             {order.products.map((product) => (
               <li key={product.product_id}>
-                {product.amount} x {product.title} - {product.price}€ each
+                --
+                <ArrowRight size={11.5} weight="bold" /> {product.amount} x{" "}
+                {product.title}
               </li>
             ))}
           </ul>

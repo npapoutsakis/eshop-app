@@ -11,16 +11,16 @@ import { Logout } from "../../utils/login";
 
 function CustomerPage() {
   const navigate = useNavigate();
-  const [loggedIn, setLoggedIn] = useState(true);
+  // const [loggedIn, setLoggedIn] = useState(true);
 
-  useEffect(() => {
-    if (loggedIn && Boolean(localStorage.getItem("isAuthenticated"))) {
-      navigate("/customer/products");
+  // useEffect(() => {
+  //   if (loggedIn && Boolean(localStorage.getItem("isAuthenticated"))) {
+  //     navigate("/customer/products");
 
-      // Set false after logged in for the first time
-      setLoggedIn(false);
-    }
-  }, [navigate, loggedIn]);
+  //     // Set false after logged in for the first time
+  //     setLoggedIn(false);
+  //   }
+  // }, [navigate, loggedIn]);
 
   async function handleLogout() {
     await Logout();
