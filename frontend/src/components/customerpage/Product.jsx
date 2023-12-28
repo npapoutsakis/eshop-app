@@ -1,21 +1,24 @@
-import React, { useState } from "react";
-import "./Product.css";
+import React, { useContext } from "react";
+import { shop_context } from "../../shop-context/ShopContext";
 
-function Product({ image, name, price, info }) {
-  const [clickCount, setClickCount] = useState(0);
+function Product(props) {
+  const { id, productName, price, productImage } = props.data;
+  const { addToCart, cartItems } = useContext(shop_context);
 
-  function handleAddToCart() {
-    setClickCount(clickCount + 1);
-  }
+  const cartItemCount = cartItems[id];
 
   return (
     <div className="product">
-      <div className="product-wrapper">
-        <img src={image} alt={name} />
-        <h3>{name}</h3>
-        <p>Price: {price}€</p>
-        <button onClick={handleAddToCart}>Add to Cart ({clickCount})</button>
+      <img src={productImage} alt="item" />
+      <div className="description">
+        <p>
+          <b>{productName}</b>
+        </p>
+        <p> ${price}</p>
       </div>
+      <button className="addToCartBttn" onClick={() => addToCart(id)}>
+        Add To Cart {cartItemCount > 0 && <> ({cartItemCount})</>}
+      </button>
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
 import SignForm from "./components/SignForm.jsx";
 import CustomerPage from "./pages/customerpage/CustomerPage.jsx";
 import SellerPage from "./pages/sellerpage/SellerPage.jsx";
