@@ -13,9 +13,8 @@ function SellerPage() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar logout={handleLogout} />
       <h1>Welcome to Seller Page</h1>
-      <button onClick={handleLogout}> LOGOUT REEE!</button>
     </div>
   );
 }

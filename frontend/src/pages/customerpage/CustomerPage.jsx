@@ -4,7 +4,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 // Components
 import Navbar from "../../components/Navbar";
 import Cart from "../../components/customerpage/Cart";
-import Order from "../../components/customerpage/Order";
+import OrderHistory from "../../components/customerpage/OrderHistory.jsx";
 import Shop from "../../components/customerpage/Shop.jsx";
 import ShopContext from "../../shop-context/ShopContext";
 import { Logout } from "../../utils/login";
@@ -34,7 +34,7 @@ function CustomerPage() {
         <Routes>
           <Route path="products" element={<Shop />} />
           <Route path="cart" element={<Cart />} />
-          <Route path="orders" element={<Order />} />
+          <Route path="orders" element={<OrderHistory />} />
         </Routes>
       </ShopContext>
     </div>

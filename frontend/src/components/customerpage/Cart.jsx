@@ -20,7 +20,7 @@ function Cart() {
         {PRODUCTS.map((product) => {
           if (cartItems[product.id] !== 0) {
             return <CartItem key={product.id} data={product} />;
-          } else return <></>;
+          } else return <React.Fragment key={product.id} />;
         })}
       </div>
 
