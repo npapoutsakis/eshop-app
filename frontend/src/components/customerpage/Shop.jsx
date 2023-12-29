@@ -1,10 +1,24 @@
-import React, { useState } from "react";
-import { PRODUCTS } from "../../products";
+import React, { useEffect, useState } from "react";
+import { getProducts } from "../../api/customer";
 import Product from "./Product";
 import "./Shop.css";
 
 function Shop() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const fetchedProducts = await getProducts();
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   return (
     <div className="shop">
@@ -23,11 +37,13 @@ function Shop() {
 
       {/* Should grab products from database */}
       <div className="products">
-        {PRODUCTS.filter((product) =>
-          product.productName.toLowerCase().includes(searchTerm.toLowerCase())
-        ).map((product) => (
-          <Product key={product.id} data={product} />
-        ))}
+        {products
+          .filter((product) =>
+            product.title.toLowerCase().includes(searchTerm.toLowerCase())
+          )
+          .map((product) => (
+            <Product key={product.id} data={product} />
+          ))}
       </div>
     </div>
   );
