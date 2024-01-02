@@ -21,7 +21,7 @@ async function getProducts() {
 
 async function getProductById(id) {
   try {
-    const response = await fetch(url + productsPort + "/api/products:id", {
+    const response = await fetch(url + productsPort + "/api/products/" + id, {
       method: "GET",
     });
     if (response.ok) {
@@ -35,7 +35,7 @@ async function getProductById(id) {
 
 async function getProductByName(name) {
   try {
-    const response = await fetch(url + productsPort + "/api/products:name", {
+    const response = await fetch(url + productsPort + "/api/products/" + name, {
       method: "GET",
     });
     if (response.ok) {
@@ -50,7 +50,7 @@ async function getProductByName(name) {
 async function getProductByUsername(username) {
   try {
     const response = await fetch(
-      url + productsPort + "/api/products:username",
+      url + productsPort + "/api/products/" + username,
       {
         method: "GET",
       }
@@ -82,7 +82,7 @@ async function getOrders(username) {
 // post an order, send to order-service
 async function makeOrder(data) {
   try {
-    const response = await fetch(url + orderPort + "/api/orders:", {
+    const response = await fetch(url + orderPort + "/api/orders", {
       method: "POST",
       body: JSON.stringify(data),
     });

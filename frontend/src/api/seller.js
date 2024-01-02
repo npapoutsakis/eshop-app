@@ -1,6 +1,6 @@
 // Seller functions
 
-const url = "http://localhost:5000/api/products";
+const url = "http://localhost:5000/api/products/";
 
 // add product to database
 async function addProduct(data) {
@@ -21,7 +21,7 @@ async function addProduct(data) {
 //update product with id
 async function updateProduct(id, data) {
   try {
-    const response = await fetch(url + "/:" + id, {
+    const response = await fetch(url + id, {
       method: "PUT",
       body: JSON.stringify(data),
     });
@@ -37,7 +37,7 @@ async function updateProduct(id, data) {
 // delete a product from database
 async function deleteProduct(id) {
   try {
-    const response = await fetch(url + "/:" + id, { method: "DELETE" });
+    const response = await fetch(url + id, { method: "DELETE" });
     if (response.ok) {
       return await response.json();
     }
