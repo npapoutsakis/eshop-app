@@ -20,16 +20,16 @@ function OrderHistory() {
     fetchOrders(localStorage.getItem("username"));
   }, []);
 
-  console.log(orders);
-
   return (
     <div className="order-history">
       <div style={{ marginTop: "100px" }}>
         <h1>Your Orders</h1>
       </div>
-      {orders.map((order) => (
-        <Order key={order.id} order={order} />
-      ))}
+      {orders
+        .sort((a, b) => a.id - b.id)
+        .map((order) => (
+          <Order key={order.id} order={order} />
+        ))}
     </div>
   );
 }

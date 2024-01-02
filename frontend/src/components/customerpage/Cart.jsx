@@ -1,15 +1,13 @@
-import React, { useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { PRODUCTS } from "../../products";
-import { shop_context } from "../../shop-context/ShopContext";
+import React from "react";
+// import { useNavigate } from "react-router-dom";
 import { CartItem } from "./CartItem";
 
+import { useCart } from "../../shop-context/CartProvider.jsx";
 import "./Cart.css";
 function Cart() {
-  const { cartItems, getTotalCartAmount, emptyCart } = useContext(shop_context);
-  const totalAmount = getTotalCartAmount();
+  const { cart } = useCart();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   return (
     <div className="cart">
@@ -17,13 +15,13 @@ function Cart() {
         <h1>Your Cart Items</h1>
       </div>
       <div className="cart">
-        {PRODUCTS.map((product) => {
-          if (cartItems[product.id] !== 0) {
+        {cart.map((product) => {
+          if (cart[product.id] !== 0) {
             return <CartItem key={product.id} data={product} />;
           } else return <React.Fragment key={product.id} />;
         })}
       </div>
-
+      {/* 
       {totalAmount > 0 ? (
         <div className="checkout">
           <p> Subtotal: {totalAmount} € </p>
@@ -33,7 +31,7 @@ function Cart() {
           </button>
           <button
             onClick={() => {
-              emptyCart();
+              clearCart();
               alert("Order Send!");
               navigate("/customer/products");
             }}
@@ -43,7 +41,7 @@ function Cart() {
         </div>
       ) : (
         <h1> Your Shopping Cart is Empty</h1>
-      )}
+      )} */}
     </div>
   );
 }

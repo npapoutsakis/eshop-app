@@ -6,7 +6,7 @@ import Navbar from "../../components/Navbar";
 import Cart from "../../components/customerpage/Cart";
 import OrderHistory from "../../components/customerpage/OrderHistory.jsx";
 import Shop from "../../components/customerpage/Shop.jsx";
-import ShopContext from "../../shop-context/ShopContext";
+import { CartProvider } from "../../shop-context/CartProvider.jsx";
 import { Logout } from "../../utils/login";
 
 function CustomerPage() {
@@ -29,14 +29,14 @@ function CustomerPage() {
 
   return (
     <div>
-      <ShopContext>
+      <CartProvider>
         <Navbar logout={handleLogout} />
         <Routes>
           <Route path="products" element={<Shop />} />
           <Route path="cart" element={<Cart />} />
           <Route path="orders" element={<OrderHistory />} />
         </Routes>
-      </ShopContext>
+      </CartProvider>
     </div>
   );
 }
