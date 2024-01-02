@@ -95,8 +95,6 @@ services:
     networks:
       - default
     restart: always
-    volumes:
-      - control-center-data:/var/lib/confluent-control-center
 
   postgres:
     container_name: keycloak-db
@@ -209,7 +207,6 @@ volumes:
   products-db-data:
   orders-db-data:
   frontend-app:
-  control-center-data:
 
 networks:
   default:

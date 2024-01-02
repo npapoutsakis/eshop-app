@@ -67,7 +67,7 @@ async function getProductByUsername(username) {
 // send request to get orders
 async function getOrders(username) {
   try {
-    const response = await fetch(url + orderPort + "/api/orders:username", {
+    const response = await fetch(url + orderPort + "/api/orders/" + username, {
       method: "GET",
     });
     if (response.ok) {
