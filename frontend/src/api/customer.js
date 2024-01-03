@@ -90,11 +90,13 @@ async function makeOrder(data, totalprice) {
 
   for (let item in data) {
     const { title, quantity, id } = data[item];
+
     const product = {
       title: title,
       amount: quantity,
       product_id: id,
     };
+
     newOrderFormat["products"].push(product);
   }
 

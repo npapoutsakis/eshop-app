@@ -1,0 +1,28 @@
+.icons-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background-color: azure;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.icons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.icon {
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+  margin: 0 10px;
+}
+
+.icon:hover {
+  color: #3498db;
+}
+
+.delete-button:hover {
+  color: #ff0000;
+}

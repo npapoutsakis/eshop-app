@@ -24,6 +24,7 @@ function Navbar({ logout, user_role }) {
       ) : (
         <div className="links">
           <Link to="myproducts"> My Products</Link>
+          <Link to="myproducts/addnew"> Add a Product</Link>
           <Link>
             <SignOut size={32} onClick={logout} weight="bold" />
           </Link>
