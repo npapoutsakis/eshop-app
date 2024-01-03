@@ -102,23 +102,17 @@ app.put("/api/products/:id", async (request, response) => {
   // dont change name of seller, doesnt make sense
   try {
     const id = request.params.id;
-    const { title, img, price, quantity } = request.body;
+    const { price, quantity } = request.body;
 
     const db = await pool;
 
     const updateQuery = `
       UPDATE products
-      SET title = $1, img = $2, price = $3, quantity = $4
-      WHERE id = $5
+      SET price = $1, quantity = $2
+      WHERE id = $3
     `;
 
-    const result = await db.query(updateQuery, [
-      title,
-      img,
-      price,
-      quantity,
-      id,
-    ]);
+    const result = await db.query(updateQuery, [price, quantity, id]);
 
     // Check if the update was successful
     if (result.rowCount > 0) {
