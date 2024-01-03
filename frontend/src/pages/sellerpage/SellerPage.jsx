@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "../../components/default/Navbar.jsx";
-import EditComponent from "../../components/sellerpage/EditComponent.jsx";
+
 import MyProducts from "../../components/sellerpage/MyProducts.jsx";
 import { Logout } from "../../utils/login";
 
@@ -30,7 +30,6 @@ function SellerPage() {
       <Navbar logout={handleLogout} user_role={localStorage.getItem("role")} />
       <Routes>
         <Route path="myproducts" element={<MyProducts />}></Route>
-        <Route path="edit" element={<EditComponent />}></Route>
       </Routes>
     </div>
   );
