@@ -1,13 +1,14 @@
 import React from "react";
-// import { useNavigate } from "react-router-dom";
-import { CartItem } from "./CartItem";
-
+import { useNavigate } from "react-router-dom";
+import { makeOrder } from "../../api/customer.js";
 import { useCart } from "../../shop-context/CartProvider.jsx";
 import "./Cart.css";
-function Cart() {
-  const { cart } = useCart();
+import { CartItem } from "./CartItem";
 
-  // const navigate = useNavigate();
+function Cart() {
+  const { cart, clearCart, calculateTotalCost } = useCart();
+  const navigate = useNavigate();
+  const totalAmount = calculateTotalCost();
 
   return (
     <div className="cart">
@@ -21,7 +22,7 @@ function Cart() {
           } else return <React.Fragment key={product.id} />;
         })}
       </div>
-      {/* 
+
       {totalAmount > 0 ? (
         <div className="checkout">
           <p> Subtotal: {totalAmount} € </p>
@@ -30,9 +31,15 @@ function Cart() {
             Continue Shopping{" "}
           </button>
           <button
-            onClick={() => {
+            onClick={async () => {
+              // Empty cart
               clearCart();
-              alert("Order Send!");
+
+              // send the order to order-service
+              await makeOrder(cart, totalAmount).then(
+                console.log("Order Send!")
+              );
+
               navigate("/customer/products");
             }}
           >
@@ -41,7 +48,7 @@ function Cart() {
         </div>
       ) : (
         <h1> Your Shopping Cart is Empty</h1>
-      )} */}
+      )}
     </div>
   );
 }

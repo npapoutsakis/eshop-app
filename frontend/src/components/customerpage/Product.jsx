@@ -3,10 +3,13 @@ import { useCart } from "../../shop-context/CartProvider";
 
 function Product(props) {
   const { id, title, price, img } = props.data;
-  const { addToCart } = useCart();
+  const { cart, addToCart } = useCart();
+
+  const productInCart = cart.find((item) => item.id === id);
+  const cartItemCount = productInCart ? productInCart.quantity : 0;
 
   function handleAddButton() {
-    return addToCart(props);
+    return addToCart(props.data);
   }
 
   return (
@@ -19,8 +22,7 @@ function Product(props) {
         <p> {price} €</p>
       </div>
       <button className="addToCartBttn" onClick={handleAddButton}>
-        {/* Add To Cart {cartItemCount > 0 && <> ({cartItemCount})</>} */}
-        Add to cart
+        Add To Cart {cartItemCount > 0 && <> ({cartItemCount})</>}
       </button>
     </div>
   );

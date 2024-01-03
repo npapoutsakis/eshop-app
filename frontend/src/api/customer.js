@@ -80,11 +80,29 @@ async function getOrders(username) {
 }
 
 // post an order, send to order-service
-async function makeOrder(data) {
+async function makeOrder(data, totalprice) {
+  // Decode cart structure
+  const newOrderFormat = {
+    products: [],
+    total_price: totalprice,
+    user_username: localStorage.getItem("username"),
+  };
+
+  for (let item in data) {
+    const { title, quantity, id } = data[item];
+    const product = {
+      title: title,
+      amount: quantity,
+      product_id: id,
+    };
+    newOrderFormat["products"].push(product);
+  }
+
   try {
     const response = await fetch(url + orderPort + "/api/orders", {
       method: "POST",
-      body: JSON.stringify(data),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newOrderFormat),
     });
     if (response.ok) {
       return await response.json();
