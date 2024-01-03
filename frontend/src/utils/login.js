@@ -118,7 +118,7 @@ export async function Login(event, username, password) {
         "role",
         decodeToken.realm_access.roles[0] === "Customer"
           ? decodeToken.realm_access.roles[0]
-          : decodeToken.realm_access.roles[2]
+          : decodeToken.realm_access.roles[1]
       );
       localStorage.setItem("refresh_token", logout_token);
       localStorage.setItem("isAuthenticated", true);

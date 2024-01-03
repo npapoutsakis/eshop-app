@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 
 // Components
-import Navbar from "../../components/Navbar";
 import Cart from "../../components/customerpage/Cart";
 import OrderHistory from "../../components/customerpage/OrderHistory.jsx";
 import Shop from "../../components/customerpage/Shop.jsx";
+import Navbar from "../../components/default/Navbar.jsx";
 import { CartProvider } from "../../shop-context/CartProvider.jsx";
 import { Logout } from "../../utils/login";
 
@@ -30,7 +30,10 @@ function CustomerPage() {
   return (
     <div>
       <CartProvider>
-        <Navbar logout={handleLogout} />
+        <Navbar
+          logout={handleLogout}
+          user_role={localStorage.getItem("role")}
+        />
         <Routes>
           <Route path="products" element={<Shop />} />
           <Route path="cart" element={<Cart />} />
