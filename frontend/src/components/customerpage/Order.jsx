@@ -21,7 +21,7 @@ function Order({ order }) {
             ))}
           </ul>
 
-          <p>Total Price: ${order.total_price}</p>
+          <p>Total Price: {order.total_price}€</p>
           <p>
             Status:{" "}
             <span className={`status-${order.status.toLowerCase()}`}>

@@ -76,6 +76,7 @@ function AddProduct() {
           />
           <span>Or</span>
           <label htmlFor="imgURL" className="form-label">
+            {" "}
             Image URL:
           </label>
           <input

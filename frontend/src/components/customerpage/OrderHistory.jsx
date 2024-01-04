@@ -26,7 +26,7 @@ function OrderHistory() {
         <h1>Your Orders</h1>
       </div>
       {orders
-        .sort((a, b) => a.id - b.id)
+        .sort((a, b) => b.id - a.id)
         .map((order) => (
           <Order key={order.id} order={order} />
         ))}

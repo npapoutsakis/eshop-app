@@ -1,6 +1,8 @@
+import { MinusCircle, PlusCircle } from "phosphor-react";
 import React from "react";
 import { useCart } from "../../shop-context/CartProvider.jsx";
 
+import "./Cart.css";
 export const CartItem = (props) => {
   const { id, title, price, img } = props.data;
   const { cart, addToCart, removeFromCart, updateQuantity } = useCart();
@@ -17,12 +19,12 @@ export const CartItem = (props) => {
         </p>
         <p> Price: {price}€</p>
         <div className="countHandler">
-          <button onClick={() => removeFromCart(id)}> - </button>
+          <MinusCircle size={24} onClick={() => removeFromCart(id)} />
           <input
             value={cartItemCount}
             onChange={(e) => updateQuantity(Number(e.target.value), id)}
           />
-          <button onClick={() => addToCart(props.data)}> + </button>
+          <PlusCircle size={24} onClick={() => addToCart(props.data)} />
         </div>
       </div>
     </div>

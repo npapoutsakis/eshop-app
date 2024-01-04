@@ -36,9 +36,7 @@ function Cart() {
               clearCart();
 
               // send the order to order-service
-              await makeOrder(cart, totalAmount).then(
-                console.log("Order Send!")
-              );
+              await makeOrder(cart, totalAmount).then(alert("Order Send!"));
 
               navigate("/customer/products");
             }}

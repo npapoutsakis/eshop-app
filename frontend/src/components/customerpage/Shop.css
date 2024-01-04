@@ -3,14 +3,15 @@
   text-align: center;
   font-size: 40px;
 }
+
 .products {
   width: 100%;
-  height: auto;
   display: flex;
-  grid-template-columns: 1fr 1fr 1fr;
-  place-items: center;
   flex-wrap: wrap;
   justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 .product {
@@ -19,9 +20,16 @@
   height: 350px;
   margin: 100px;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  transition: transform 0.3s ease-in-out;
+  background-color: transparent;
+}
+
+.product:hover {
+  transform: scale(1.05);
 }
 
 .product img {
@@ -37,30 +45,28 @@
   text-align: center;
 }
 
-.product:hover {
-  transition: 0.3s ease-in;
-  cursor: pointer;
-}
-
 .addToCartBttn {
-  background-color: transparent;
-  border: 2px solid rgb(19, 19, 19);
-  min-width: 100px;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  border-radius: 15px;
+  background-color: #ff5e62;
+  color: #fff;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
 }
 
 .addToCartBttn:hover {
-  background-color: rgb(19, 19, 19);
-  color: white;
-  cursor: pointer;
+  background-color: #e05357;
 }
 
 .searchBar {
-  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
   margin-left: 20px;
 }
 
@@ -68,7 +74,12 @@
   padding: 10px;
   font-size: 16px;
   width: 300px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  margin-right: 10px;
+  border: 2px solid #ccc;
+  border-radius: 25px;
+  outline: none;
+  transition: border-color 0.3s ease-in-out;
+}
+
+.searchBar input:focus {
+  border-color: #3498db;
 }

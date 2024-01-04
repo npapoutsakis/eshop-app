@@ -22,13 +22,38 @@
 
 .cartItem .description {
   width: 100%;
-  font-size: 30px;
+  font-size: 22px;
+}
+
+.countHandler {
+  display: flex;
+  align-items: center;
+}
+
+.countHandler svg {
+  cursor: pointer;
+  margin: 0 8px;
+  transition: color 0.3s ease;
+}
+
+.countHandler svg:hover {
+  color: #3498db;
 }
 
 .countHandler input {
-  width: 40px;
+  width: 30px;
   text-align: center;
-  font-weight: bolder;
+  margin: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 1px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.countHandler input:focus {
+  outline: none;
+  border-color: #3498db;
 }
 
 .checkout button {
