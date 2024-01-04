@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import Navbar from "../../components/default/Navbar.jsx";
 
+import AddProduct from "../../components/sellerpage/AddProduct.jsx";
 import MyProducts from "../../components/sellerpage/MyProducts.jsx";
 import { Logout } from "../../utils/login";
 
@@ -30,6 +31,10 @@ function SellerPage() {
       <Navbar logout={handleLogout} user_role={localStorage.getItem("role")} />
       <Routes>
         <Route path="myproducts" element={<MyProducts />}></Route>
+        <Route
+          path="myproducts/add_new_product"
+          element={<AddProduct />}
+        ></Route>
       </Routes>
     </div>
   );
