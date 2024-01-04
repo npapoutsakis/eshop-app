@@ -9,7 +9,7 @@ export async function Register(event, username, email, password, role) {
     var urlencoded = new URLSearchParams();
     urlencoded.append("grant_type", "client_credentials");
     urlencoded.append("client_id", "admin-cli");
-    urlencoded.append("client_secret", "tec2Pi5Pm4nHNvI0ZZyI8Bunv7BHvUlm");
+    urlencoded.append("client_secret", "VV5OBIA9ZZa0ERoFgubXuIfwQTutTl7W");
 
     var requestOptions = {
       method: "POST",
@@ -91,7 +91,7 @@ export async function Login(event, username, password) {
     urlencoded.append("username", username);
     urlencoded.append("password", password);
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "Gi6fcKlXq18FXpHsoIlbXsuZH4tcwrRO");
+    urlencoded.append("client_secret", "NeOBItxA6VrnhaDsHD8226ObY7DD3odl");
     urlencoded.append("grant_type", "password");
 
     var requestOptions = {
@@ -142,7 +142,7 @@ export async function Logout() {
     var urlencoded = new URLSearchParams();
     urlencoded.append("refresh_token", localStorage.getItem("refresh_token"));
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "Gi6fcKlXq18FXpHsoIlbXsuZH4tcwrRO");
+    urlencoded.append("client_secret", "NeOBItxA6VrnhaDsHD8226ObY7DD3odl");
 
     var requestOptions = {
       method: "POST",
