@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Login, Register } from "../../utils/login.js";
 import "./SignForm.css";
 
-// i have to fetch data from keycloack api to see if the user is already registered
 function SignForm() {
   const [isRegistered, setStatus] = useState(true);
   const [username, setUsername] = useState("");
@@ -16,6 +15,7 @@ function SignForm() {
     if (localStorage.getItem("isAuthenticated"))
       return navigate(`/${localStorage.getItem("role").toLocaleLowerCase()}`);
   }
+
   useEffect(() => {
     handleLoggedIn();
   });

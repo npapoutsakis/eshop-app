@@ -1,5 +1,3 @@
-// AddProduct.jsx
-
 import React, { useState } from "react";
 import { addProduct } from "../../api/seller";
 import "./AddProduct.css";
@@ -40,7 +38,7 @@ function AddProduct() {
 
       delete newDataForm.imgURL;
 
-      await addProduct(formData);
+      await addProduct(newDataForm);
       window.location.reload();
     } catch (error) {
       console.error("Error adding product:", error);
