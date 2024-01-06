@@ -1,4 +1,5 @@
 // Customer functions
+import { checkToken } from "../utils/login.js";
 
 const url = "http://localhost:";
 const orderPort = 5500;
@@ -7,8 +8,15 @@ const productsPort = 5000;
 // send api request for products
 async function getProducts() {
   try {
+    const ok = await checkToken();
+
+    if (!ok) return console.log("Error, user not authenticated!");
+
     const response = await fetch(url + productsPort + "/api/products", {
       method: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
     });
     if (response.ok) {
       return await response.json();
@@ -23,6 +31,9 @@ async function getProductById(id) {
   try {
     const response = await fetch(url + productsPort + "/api/products/" + id, {
       method: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
     });
     if (response.ok) {
       return await response.json();
@@ -37,6 +48,9 @@ async function getProductByName(name) {
   try {
     const response = await fetch(url + productsPort + "/api/products/" + name, {
       method: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
     });
     if (response.ok) {
       return await response.json();
@@ -53,6 +67,9 @@ async function getProductByUsername(username) {
       url + productsPort + "/api/products/" + username,
       {
         method: "GET",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
+        },
       }
     );
     if (response.ok) {
@@ -69,6 +86,9 @@ async function getOrders(username) {
   try {
     const response = await fetch(url + orderPort + "/api/orders/" + username, {
       method: "GET",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
     });
     if (response.ok) {
       return await response.json();
@@ -103,7 +123,10 @@ async function makeOrder(data, totalprice) {
   try {
     const response = await fetch(url + orderPort + "/api/orders", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
       body: JSON.stringify(newOrderFormat),
     });
     if (response.ok) {

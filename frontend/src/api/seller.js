@@ -9,6 +9,7 @@ async function addProduct(data) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
       body: JSON.stringify(data),
     });
@@ -28,6 +29,7 @@ async function updateProduct(id, data) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
       body: JSON.stringify(data),
     });
@@ -43,7 +45,12 @@ async function updateProduct(id, data) {
 // delete a product from database
 async function deleteProduct(id) {
   try {
-    const response = await fetch(url + id, { method: "DELETE" });
+    const response = await fetch(url + id, {
+      method: "DELETE",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("access_token"),
+      },
+    });
     if (response.ok) {
       return await response.json();
     }

@@ -120,6 +120,7 @@ export async function Login(event, username, password) {
           ? decodeToken.realm_access.roles[0]
           : decodeToken.realm_access.roles[1]
       );
+      localStorage.setItem("access_token", token);
       localStorage.setItem("refresh_token", logout_token);
       localStorage.setItem("isAuthenticated", true);
     } else {
@@ -165,6 +166,87 @@ export async function Logout() {
     console.log(error);
   }
   return;
+}
+
+export async function updateToken() {
+  try {
+    // Construct request
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("client_id", "frontend-app");
+    urlencoded.append("grand_type", "refresh_token");
+    urlencoded.append("client_secret", "NeOBItxA6VrnhaDsHD8226ObY7DD3odl");
+    urlencoded.append("refresh_token", localStorage.getItem("refresh_token"));
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+    };
+
+    const response = await fetch(
+      "http://localhost:8080/auth/realms/eshop/protocol/openid-connect/token",
+      requestOptions
+    );
+
+    if (response.ok) {
+      // set new refresh and access token
+      const new_login = await response.json();
+
+      const new_access_token = new_login.access_token;
+      const new_refresh_token = new_login.refresh_token;
+
+      localStorage.setItem("access_token", new_access_token);
+      localStorage.setItem("refresh_token", new_refresh_token);
+    } else {
+      const err = await response.json();
+      console.log(err);
+    }
+  } catch (error) {
+    console.error("Error while updating token", error);
+  }
+  return;
+}
+
+export async function checkToken() {
+  try {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/x-www-form-urlencoded");
+
+    var urlencoded = new URLSearchParams();
+    urlencoded.append("token", localStorage.getItem("access_token"));
+    urlencoded.append("client_id", "frontend-app");
+    urlencoded.append("client_secret", "NeOBItxA6VrnhaDsHD8226ObY7DD3odl");
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: urlencoded,
+    };
+
+    const response = await fetch(
+      "http://localhost:8080/auth/realms/eshop/protocol/openid-connect/token",
+      requestOptions
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+
+      // check if token is active
+      if (data.active) {
+        return true;
+      } else {
+        return updateToken();
+      }
+    } else {
+      const err = await response.json();
+      console.log(err);
+    }
+  } catch (error) {
+    console.error("Error checking the token", error);
+  }
 }
 
 export function decodeJwt(jwtToken) {
