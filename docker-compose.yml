@@ -17,8 +17,8 @@ services:
       - orders
     volumes:
       - orders-db-data:/var/lib/postgresql/data
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
+    # extra_hosts:
+    #   - "host.docker.internal:172.17.0.1"
 
   products_db:
     container_name: products_db
@@ -66,8 +66,8 @@ services:
       KAFKA_JMX_HOSTNAME: localhost
     networks:
       - default
-      - orders
-      - products
+      # - orders
+      # - products
     restart: on-failure
     healthcheck:
       test: ["CMD", "ping", "-c", "1", "localhost:8097"]
@@ -162,41 +162,41 @@ services:
     volumes:
       - ./frontend:/app
 
-  products-service:
-    container_name: products-server
-    restart: always
-    build:
-      context: ./backend/products
-      dockerfile: Dockerfile
-    ports:
-      - "5000:5000"
-    volumes:
-      - ./backend/products:/app
-    depends_on:
-      - products_db
-      - zookeeper
-      - kafka
-    networks:
-      - products
+  # products-service:
+  #   container_name: products-server
+  #   restart: always
+  #   build:
+  #     context: ./backend/products
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5000:5000"
+  #   volumes:
+  #     - ./backend/products:/app
+  #   depends_on:
+  #     - products_db
+  #     - zookeeper
+  #     - kafka
+  #   networks:
+  #     - products
 
-  orders-service:
-    container_name: orders-server
-    restart: always
-    build:
-      context: ./backend/orders
-      dockerfile: Dockerfile
-    ports:
-      - "5500:5500"
-    environment:
-      - PORT=5500
-    volumes:
-      - ./backend/orders:/app
-    depends_on:
-      - orders_db
-      - zookeeper
-      - kafka
-    networks:
-      - orders
+  # orders-service:
+  #   container_name: orders-server
+  #   restart: always
+  #   build:
+  #     context: ./backend/orders
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "5500:5500"
+  #   environment:
+  #     - PORT=5500
+  #   volumes:
+  #     - ./backend/orders:/app
+  #   depends_on:
+  #     - orders_db
+  #     - zookeeper
+  #     - kafka
+  #   networks:
+  #     - orders
 
 volumes:
   postgres-data:
