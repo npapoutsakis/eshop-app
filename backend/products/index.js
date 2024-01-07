@@ -10,13 +10,13 @@ const port = process.env.PORT || 5000;
 
 const keycloak = new Keycloak("./keycloak.json");
 
-app.use(cors({ origin: "http://localhost:3000" }));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
-    secret: "NeOBItxA6VrnhaDsHD8226ObY7DD3odl",
+    secret: "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR",
     resave: false,
     saveUninitialized: true,
   })
@@ -63,7 +63,7 @@ app.get(
 // Get product by id, name of product and seller
 app.get(
   "/api/products/:param",
-  keycloak.protect("realm:Customer"),
+  keycloak.protect(),
   async (request, response) => {
     try {
       const parameter = request.params.param;

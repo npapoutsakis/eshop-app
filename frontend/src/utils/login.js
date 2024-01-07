@@ -91,7 +91,7 @@ export async function Login(event, username, password) {
     urlencoded.append("username", username);
     urlencoded.append("password", password);
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "NeOBItxA6VrnhaDsHD8226ObY7DD3odl");
+    urlencoded.append("client_secret", "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR");
     urlencoded.append("grant_type", "password");
 
     var requestOptions = {
@@ -143,7 +143,7 @@ export async function Logout() {
     var urlencoded = new URLSearchParams();
     urlencoded.append("refresh_token", localStorage.getItem("refresh_token"));
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "NeOBItxA6VrnhaDsHD8226ObY7DD3odl");
+    urlencoded.append("client_secret", "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR");
 
     var requestOptions = {
       method: "POST",
@@ -176,8 +176,8 @@ export async function updateToken() {
 
     var urlencoded = new URLSearchParams();
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("grand_type", "refresh_token");
-    urlencoded.append("client_secret", "NeOBItxA6VrnhaDsHD8226ObY7DD3odl");
+    urlencoded.append("grant_type", "refresh_token");
+    urlencoded.append("client_secret", "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR");
     urlencoded.append("refresh_token", localStorage.getItem("refresh_token"));
 
     var requestOptions = {
@@ -186,10 +186,7 @@ export async function updateToken() {
       body: urlencoded,
     };
 
-    const response = await fetch(
-      "http://localhost:8080/auth/realms/eshop/protocol/openid-connect/token",
-      requestOptions
-    );
+    const response = await fetch("http://localhost:8888/token", requestOptions);
 
     if (response.ok) {
       // set new refresh and access token
@@ -218,7 +215,7 @@ export async function checkToken() {
     var urlencoded = new URLSearchParams();
     urlencoded.append("token", localStorage.getItem("access_token"));
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "NeOBItxA6VrnhaDsHD8226ObY7DD3odl");
+    urlencoded.append("client_secret", "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR");
 
     var requestOptions = {
       method: "POST",
@@ -227,7 +224,7 @@ export async function checkToken() {
     };
 
     const response = await fetch(
-      "http://localhost:8080/auth/realms/eshop/protocol/openid-connect/token",
+      "http://localhost:8888/introspect",
       requestOptions
     );
 
@@ -239,6 +236,7 @@ export async function checkToken() {
         return true;
       } else {
         return updateToken();
+        // return false;
       }
     } else {
       const err = await response.json();

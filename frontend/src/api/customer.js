@@ -10,7 +10,10 @@ async function getProducts() {
   try {
     const ok = await checkToken();
 
-    if (!ok) return console.log("Error, user not authenticated!");
+    if (!ok) {
+      console.log("Error, user not authenticated!");
+      return false;
+    }
 
     const response = await fetch(url + productsPort + "/api/products", {
       method: "GET",

@@ -1,5 +1,5 @@
 import cors from "cors";
-import express, { response } from "express";
+import express from "express";
 import pool from "./databaseConnection.js";
 import { sendOrders } from "./kafka.js";
 
@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   session({
-    secret: "NeOBItxA6VrnhaDsHD8226ObY7DD3odl",
+    secret: "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR",
     resave: false,
     saveUninitialized: true,
   })
