@@ -197,6 +197,7 @@ export async function updateToken() {
 
       localStorage.setItem("access_token", new_access_token);
       localStorage.setItem("refresh_token", new_refresh_token);
+      return true;
     } else {
       const err = await response.json();
       console.log(err);
