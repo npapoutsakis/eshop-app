@@ -129,27 +129,6 @@ services:
     networks:
       - keycloak-postgres-network
 
-  pgadmin:
-    container_name: pgadmin4
-    image: dpage/pgadmin4
-    restart: unless-stopped
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-      - PGADMIN_LISTEN_PORT:5050
-    ports:
-      - "5050:80"
-    networks:
-      - keycloak-postgres-network
-      - products
-      - orders
-    depends_on:
-      - products_db
-      - orders_db
-      - postgres
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
-
   frontend:
     container_name: frontend
     build:
@@ -201,7 +180,6 @@ services:
 volumes:
   postgres-data:
   keycloak-data:
-  pgadmin-data:
   products-db-data:
   orders-db-data:
   frontend-app:
