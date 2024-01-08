@@ -6,7 +6,6 @@ async function connect() {
   try {
     const pool = new Pool({
       host: "172.17.0.1",
-      // host: "localhost",
       port: 3310,
       user: "admin",
       password: "admin",

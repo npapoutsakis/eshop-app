@@ -233,12 +233,12 @@ export async function checkToken() {
       const data = await response.json();
 
       // check if token is active
-      if (data.active) {
-        return true;
-      } else {
-        return updateToken();
-        // return false;
+      if (!data.active) {
+        // return updateToken();
+        return false;
       }
+
+      return true;
     } else {
       const err = await response.json();
       console.log(err);

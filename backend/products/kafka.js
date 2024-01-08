@@ -4,8 +4,7 @@ import handleProducts from "./handleProducts.js";
 // Initialize kafka client for product service
 const kafka = new Kafka({
   clientId: "product-app",
-  // brokers: ["kafka:19092"],
-  brokers: ["localhost:8097"],
+  brokers: ["kafka:19092"],
   retry: {
     initialRetryTime: 2000,
     retries: 5,

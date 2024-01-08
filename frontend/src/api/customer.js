@@ -1,5 +1,4 @@
 // Customer functions
-import { checkToken } from "../utils/login.js";
 
 const url = "http://localhost:";
 const orderPort = 5500;
@@ -8,13 +7,6 @@ const productsPort = 5000;
 // send api request for products
 async function getProducts() {
   try {
-    // const ok = await checkToken();
-
-    // if (!ok) {
-    //   console.log("Error, user not authenticated!");
-    //   return false;
-    // }
-
     const response = await fetch(url + productsPort + "/api/products", {
       method: "GET",
       headers: {

@@ -1,8 +1,0 @@
-{
-  "auth-server-url": "http://localhost:8080/auth/",
-  "realm": "eshop",
-  "resource": "frontend-app",
-  "credentials": {
-    "secret": "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR"
-  }
-}
