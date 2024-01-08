@@ -1,7 +1,7 @@
 version: "3.9"
 
 services:
-  orders_db:
+  orders-database:
     container_name: orders_db
     image: postgres
     restart: always
@@ -14,13 +14,11 @@ services:
     expose:
       - 3308
     networks:
-      - orders
+      - default
     volumes:
       - orders-db-data:/var/lib/postgresql/data
-    extra_hosts:
-      - "host.docker.internal:172.17.0.1"
 
-  products_db:
+  products-database:
     container_name: products_db
     image: postgres
     restart: always
@@ -33,7 +31,7 @@ services:
     expose:
       - 3310
     networks:
-      - products
+      - default
     volumes:
       - products-db-data:/var/lib/postgresql/data
 
@@ -66,8 +64,6 @@ services:
       KAFKA_JMX_HOSTNAME: localhost
     networks:
       - default
-      - orders
-      - products
     restart: on-failure
     healthcheck:
       test: ["CMD", "ping", "-c", "1", "localhost:8097"]
@@ -107,9 +103,10 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - keycloak-postgres-network
+      - default
 
   keycloak:
+    container_name: keycloak
     image: jboss/keycloak
     restart: unless-stopped
     environment:
@@ -127,7 +124,7 @@ services:
     volumes:
       - keycloak-data:/opt/jboss/keycloak/standalone/data
     networks:
-      - keycloak-postgres-network
+      - default
 
   frontend:
     container_name: frontend
@@ -140,6 +137,8 @@ services:
       - keycloak
     volumes:
       - ./frontend:/app
+    networks:
+      - default
 
   products-service:
     container_name: products-server
@@ -152,11 +151,11 @@ services:
     volumes:
       - ./backend/products:/app
     depends_on:
-      - products_db
+      - products-database
       - zookeeper
       - kafka
     networks:
-      - products
+      - default
 
   orders-service:
     container_name: orders-server
@@ -171,11 +170,11 @@ services:
     volumes:
       - ./backend/orders:/app
     depends_on:
-      - orders_db
+      - orders-database
       - zookeeper
       - kafka
     networks:
-      - orders
+      - default
 
 volumes:
   postgres-data:
@@ -187,6 +186,3 @@ volumes:
 networks:
   default:
     driver: bridge
-  keycloak-postgres-network:
-  products:
-  orders:

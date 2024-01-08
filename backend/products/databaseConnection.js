@@ -5,8 +5,8 @@ const { Pool } = pg;
 async function connect() {
   try {
     const pool = new Pool({
-      host: "172.17.0.1",
-      port: 3310,
+      host: "products-database",
+      port: 5432,
       user: "admin",
       password: "admin",
       database: "products_db",
