@@ -1,4 +1,5 @@
 // Customer functions
+import { checkToken } from "../utils/login";
 
 const url = "http://localhost:";
 const orderPort = 5500;
@@ -7,6 +8,10 @@ const productsPort = 5000;
 // send api request for products
 async function getProducts() {
   try {
+    const ok = checkToken();
+
+    if (!ok) return { "Access Denied": "Unauthorized" };
+
     const response = await fetch(url + productsPort + "/api/products", {
       method: "GET",
       headers: {

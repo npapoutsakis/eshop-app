@@ -117,6 +117,7 @@ services:
       - DB_DATABASE=keycloak
       - DB_USER=keycloak
       - DB_PASSWORD=keycloak
+      - PROXY_ADDRESS_FORWARDING=true
     ports:
       - "8080:8080"
     depends_on:
@@ -135,6 +136,7 @@ services:
       - "3000:3000"
     depends_on:
       - keycloak
+      - proxy-server
     volumes:
       - ./frontend:/app
     networks:
@@ -165,14 +167,27 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5500:5500"
-    environment:
-      - PORT=5500
     volumes:
       - ./backend/orders:/app
     depends_on:
       - orders-database
       - zookeeper
       - kafka
+    networks:
+      - default
+
+  proxy-server:
+    container_name: keycloak-proxy-server
+    restart: always
+    build:
+      context: ./backend/keycloak-proxy
+      dockerfile: Dockerfile
+    ports:
+      - "8888:8888"
+    depends_on:
+      - keycloak
+    volumes:
+      - ./backend/keycloak-proxy:/app
     networks:
       - default
 

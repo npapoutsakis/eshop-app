@@ -9,7 +9,7 @@ export async function Register(event, username, email, password, role) {
     var urlencoded = new URLSearchParams();
     urlencoded.append("grant_type", "client_credentials");
     urlencoded.append("client_id", "admin-cli");
-    urlencoded.append("client_secret", "VV5OBIA9ZZa0ERoFgubXuIfwQTutTl7W");
+    urlencoded.append("client_secret", "KTi3o0AB46QmrvGC9nZ6mDtxGb8jfsYO");
 
     var requestOptions = {
       method: "POST",
@@ -91,7 +91,7 @@ export async function Login(event, username, password) {
     urlencoded.append("username", username);
     urlencoded.append("password", password);
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR");
+    urlencoded.append("client_secret", "GYSHspqfLQImMtKdjdWAXRxxCRcXyNNz");
     urlencoded.append("grant_type", "password");
 
     var requestOptions = {
@@ -143,7 +143,7 @@ export async function Logout() {
     var urlencoded = new URLSearchParams();
     urlencoded.append("refresh_token", localStorage.getItem("refresh_token"));
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR");
+    urlencoded.append("client_secret", "GYSHspqfLQImMtKdjdWAXRxxCRcXyNNz");
 
     var requestOptions = {
       method: "POST",
@@ -177,7 +177,7 @@ export async function updateToken() {
     var urlencoded = new URLSearchParams();
     urlencoded.append("client_id", "frontend-app");
     urlencoded.append("grant_type", "refresh_token");
-    urlencoded.append("client_secret", "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR");
+    urlencoded.append("client_secret", "GYSHspqfLQImMtKdjdWAXRxxCRcXyNNz");
     urlencoded.append("refresh_token", localStorage.getItem("refresh_token"));
 
     var requestOptions = {
@@ -186,7 +186,10 @@ export async function updateToken() {
       body: urlencoded,
     };
 
-    const response = await fetch("http://localhost:8888/token", requestOptions);
+    const response = await fetch(
+      "http://localhost:8888/auth/realms/eshop/protocol/openid-connect/token/introspect",
+      requestOptions
+    );
 
     if (response.ok) {
       // set new refresh and access token
@@ -216,7 +219,7 @@ export async function checkToken() {
     var urlencoded = new URLSearchParams();
     urlencoded.append("token", localStorage.getItem("access_token"));
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "L05Ae2jRdHxSnghWAwBhAFRGRJ2xxKZR");
+    urlencoded.append("client_secret", "GYSHspqfLQImMtKdjdWAXRxxCRcXyNNz");
 
     var requestOptions = {
       method: "POST",
@@ -225,23 +228,22 @@ export async function checkToken() {
     };
 
     const response = await fetch(
-      "http://localhost:8888/introspect",
+      "http://localhost:8888/checktoken",
       requestOptions
     );
 
     if (response.ok) {
       const data = await response.json();
+      console.log(data);
 
       // check if token is active
       if (!data.active) {
         // return updateToken();
         return false;
       }
-
       return true;
     } else {
-      const err = await response.json();
-      console.log(err);
+      console.error("Server returned an error:", response.statusText);
     }
   } catch (error) {
     console.error("Error checking the token", error);
