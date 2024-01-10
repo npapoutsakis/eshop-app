@@ -1,16 +1,34 @@
 // Customer functions
-import { checkToken } from "../utils/login";
+
+import { Logout, decodeJwt } from "../utils/login.js";
 
 const url = "http://localhost:";
 const orderPort = 5500;
 const productsPort = 5000;
 
+function isTokenExpired(expTimestamp) {
+  const expDate = new Date(expTimestamp * 1000);
+  const currentTime = new Date();
+  return currentTime > expDate;
+}
+
 // send api request for products
 async function getProducts() {
   try {
-    const ok = checkToken();
+    // check token
+    const decodeToken = decodeJwt(localStorage.getItem("access_token"));
 
-    if (!ok) return { "Access Denied": "Unauthorized" };
+    if (isTokenExpired(decodeToken.exp)) {
+      alert(
+        `{"Access Denied": "Token expired, you will be redirected back to login page!"}`
+      );
+
+      await Logout();
+
+      window.location.reload();
+
+      return false;
+    }
 
     const response = await fetch(url + productsPort + "/api/products", {
       method: "GET",
