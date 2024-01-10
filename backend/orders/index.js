@@ -2,6 +2,7 @@ import cors from "cors";
 import express from "express";
 import pool from "./databaseConnection.js";
 import { sendOrders } from "./kafka.js";
+import { decodeJwt, isTokenExpired } from "./utils.js";
 
 const app = express();
 const port = 5500;
@@ -10,11 +11,36 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// check for token validation
-const checkToken = (req, res, next) => {
-  if (!req.headers.authorization) {
+// Custom middleware
+const checkToken = (role) => async (req, res, next) => {
+  // Get the token from the Authorization header
+  const token = req.headers.authorization;
+
+  // Check if the token is present
+  if (!token) {
     return res.status(401).json({ "Access Denied": "Unauthorized" });
   }
+
+  // get exp date and see if the token is invalid
+  const decodeToken = await decodeJwt(token.split(" ")[1]);
+
+  if (isTokenExpired(decodeToken.exp)) {
+    return res.status(401).json({
+      "Access Denied":
+        "Token expired, you will be redirected back to login page!",
+    });
+  }
+
+  // check role
+  const token_role =
+    decodeToken.realm_access.roles[0] === "Customer"
+      ? decodeToken.realm_access.roles[0]
+      : decodeToken.realm_access.roles[1];
+
+  if (token_role !== role) {
+    return res.status(401).json({ "Access Denied": "Not allowed!" });
+  }
+
   next();
 };
 
@@ -24,25 +50,29 @@ app.get("/", (request, response) => {
 });
 
 // GET ORDERS - CUSTOMER
-app.get("/api/orders/:username", checkToken, async (request, response) => {
-  const username = request.params.username;
-  try {
-    const db = await pool;
+app.get(
+  "/api/orders/:username",
+  checkToken("Customer"),
+  async (request, response) => {
+    const username = request.params.username;
+    try {
+      const db = await pool;
 
-    const result = await db.query(
-      "SELECT * FROM orders WHERE user_username = $1",
-      [username]
-    );
+      const result = await db.query(
+        "SELECT * FROM orders WHERE user_username = $1",
+        [username]
+      );
 
-    response.send(result.rows);
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    response.status(500).json({ error: "Internal Server Error" });
+      response.send(result.rows);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+      response.status(500).json({ error: "Internal Server Error" });
+    }
   }
-});
+);
 
 // POST - CUSTOMER
-app.post("/api/orders", checkToken, async (request, response) => {
+app.post("/api/orders", checkToken("Customer"), async (request, response) => {
   const { products, total_price, user_username } = request.body;
   try {
     const db = await pool;

@@ -1,10 +1,34 @@
 // Seller functions
+import { decodeJwt, Logout } from "../utils/login";
 
 const url = "http://localhost:5000/api/products/";
+
+function isTokenExpired(expTimestamp) {
+  const expDate = new Date(expTimestamp * 1000);
+  const currentTime = new Date();
+  return currentTime > expDate;
+}
+
+async function checkToken(token) {
+  if (isTokenExpired(token.exp)) {
+    alert(
+      `{"Access Denied": "Token expired, you will be redirected back to login page!"}`
+    );
+
+    await Logout();
+
+    window.location.reload();
+
+    return false;
+  }
+}
 
 // add product to database
 async function addProduct(data) {
   try {
+    // check token
+    await checkToken(decodeJwt(localStorage.getItem("access_token")));
+
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -25,6 +49,9 @@ async function addProduct(data) {
 //update product with id
 async function updateProduct(id, data) {
   try {
+    // check token
+    await checkToken(decodeJwt(localStorage.getItem("access_token")));
+
     const response = await fetch(url + id, {
       method: "PUT",
       headers: {
@@ -45,6 +72,9 @@ async function updateProduct(id, data) {
 // delete a product from database
 async function deleteProduct(id) {
   try {
+    // check token
+    await checkToken(decodeJwt(localStorage.getItem("access_token")));
+
     const response = await fetch(url + id, {
       method: "DELETE",
       headers: {

@@ -12,23 +12,25 @@ function isTokenExpired(expTimestamp) {
   return currentTime > expDate;
 }
 
+async function checkToken(token) {
+  if (isTokenExpired(token.exp)) {
+    alert(
+      `{"Access Denied": "Token expired, you will be redirected back to login page!"}`
+    );
+
+    await Logout();
+
+    window.location.reload();
+
+    return false;
+  }
+}
+
 // send api request for products
 async function getProducts() {
   try {
     // check token
-    const decodeToken = decodeJwt(localStorage.getItem("access_token"));
-
-    if (isTokenExpired(decodeToken.exp)) {
-      alert(
-        `{"Access Denied": "Token expired, you will be redirected back to login page!"}`
-      );
-
-      await Logout();
-
-      window.location.reload();
-
-      return false;
-    }
+    await checkToken(decodeJwt(localStorage.getItem("access_token")));
 
     const response = await fetch(url + productsPort + "/api/products", {
       method: "GET",
@@ -36,6 +38,7 @@ async function getProducts() {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     });
+
     if (response.ok) {
       return await response.json();
     }
@@ -47,12 +50,16 @@ async function getProducts() {
 
 async function getProductById(id) {
   try {
+    // check token
+    await checkToken(decodeJwt(localStorage.getItem("access_token")));
+
     const response = await fetch(url + productsPort + "/api/products/" + id, {
       method: "GET",
       headers: {
         Authorization: "Bearer " + localStorage.getItem("access_token"),
       },
     });
+
     if (response.ok) {
       return await response.json();
     }
@@ -64,6 +71,9 @@ async function getProductById(id) {
 
 async function getProductByName(name) {
   try {
+    // check token
+    await checkToken(decodeJwt(localStorage.getItem("access_token")));
+
     const response = await fetch(url + productsPort + "/api/products/" + name, {
       method: "GET",
       headers: {
@@ -81,6 +91,9 @@ async function getProductByName(name) {
 
 async function getProductByUsername(username) {
   try {
+    // check token
+    await checkToken(decodeJwt(localStorage.getItem("access_token")));
+
     const response = await fetch(
       url + productsPort + "/api/products/" + username,
       {
@@ -102,6 +115,9 @@ async function getProductByUsername(username) {
 // send request to get orders
 async function getOrders(username) {
   try {
+    // check token
+    await checkToken(decodeJwt(localStorage.getItem("access_token")));
+
     const response = await fetch(url + orderPort + "/api/orders/" + username, {
       method: "GET",
       headers: {
@@ -119,6 +135,9 @@ async function getOrders(username) {
 
 // post an order, send to order-service
 async function makeOrder(data, totalprice) {
+  // check token
+  await checkToken(decodeJwt(localStorage.getItem("access_token")));
+
   // Decode cart structure
   const newOrderFormat = {
     products: [],

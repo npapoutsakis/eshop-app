@@ -37,7 +37,10 @@ const checkToken = (role) => async (req, res, next) => {
       ? decodeToken.realm_access.roles[0]
       : decodeToken.realm_access.roles[1];
 
-  if (token_role !== role) {
+  // Check if the user has at least one allowed role
+  const hasAccess = role.includes(token_role);
+
+  if (!hasAccess) {
     return res.status(401).json({ "Access Denied": "Not allowed!" });
   }
 
@@ -76,7 +79,7 @@ app.get("/api/products", checkToken("Customer"), async (request, response) => {
 // Get product by id, name of product and seller
 app.get(
   "/api/products/:param",
-  checkToken("Customer"),
+  checkToken(["Customer", "Seller"]),
   async (request, response) => {
     try {
       const parameter = request.params.param;
