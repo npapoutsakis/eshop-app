@@ -1,5 +1,7 @@
 // Utility functions
 
+const cloud_ip = "34.118.92.179";
+
 export async function Register(event, username, email, password, role) {
   event.preventDefault();
   try {
@@ -9,7 +11,7 @@ export async function Register(event, username, email, password, role) {
     var urlencoded = new URLSearchParams();
     urlencoded.append("grant_type", "client_credentials");
     urlencoded.append("client_id", "admin-cli");
-    urlencoded.append("client_secret", "AcjExLItTRVipQugTGpkhttohAeKaa9D");
+    urlencoded.append("client_secret", "ZLg6LRpwlF8GOptCIl0qAQYEvqCxDQlA");
 
     var requestOptions = {
       method: "POST",
@@ -19,7 +21,7 @@ export async function Register(event, username, email, password, role) {
     };
 
     const first_response = await fetch(
-      "http://localhost:8080/auth/realms/master/protocol/openid-connect/token",
+      `http://${cloud_ip}:8080/auth/realms/master/protocol/openid-connect/token`,
       requestOptions
     );
 
@@ -60,7 +62,7 @@ export async function Register(event, username, email, password, role) {
       };
 
       const register_user = await fetch(
-        "http://localhost:8080/auth/admin/realms/eshop/users",
+        `http://${cloud_ip}:8080/auth/admin/realms/eshop/users`,
         newRequestOptions
       );
 
@@ -91,7 +93,7 @@ export async function Login(event, username, password) {
     urlencoded.append("username", username);
     urlencoded.append("password", password);
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "rSFLywGplHlKz4F5L4a29VJoXYhQnXYE");
+    urlencoded.append("client_secret", "tuQZc0Mdlsxzp426u4mqsk88lYc3F5To");
     urlencoded.append("grant_type", "password");
 
     var requestOptions = {
@@ -102,7 +104,7 @@ export async function Login(event, username, password) {
     };
 
     const response = await fetch(
-      "http://localhost:8080/auth/realms/eshop/protocol/openid-connect/token",
+      `http://${cloud_ip}:8080/auth/realms/eshop/protocol/openid-connect/token`,
       requestOptions
     );
 
@@ -118,7 +120,7 @@ export async function Login(event, username, password) {
         "role",
         decodeToken.realm_access.roles[0] === "Customer"
           ? decodeToken.realm_access.roles[0]
-          : decodeToken.realm_access.roles[1]
+          : decodeToken.realm_access.roles[2]
       );
       localStorage.setItem("access_token", token);
       localStorage.setItem("refresh_token", logout_token);
@@ -143,7 +145,7 @@ export async function Logout() {
     var urlencoded = new URLSearchParams();
     urlencoded.append("refresh_token", localStorage.getItem("refresh_token"));
     urlencoded.append("client_id", "frontend-app");
-    urlencoded.append("client_secret", "rSFLywGplHlKz4F5L4a29VJoXYhQnXYE");
+    urlencoded.append("client_secret", "tuQZc0Mdlsxzp426u4mqsk88lYc3F5To");
 
     var requestOptions = {
       method: "POST",
@@ -153,7 +155,7 @@ export async function Logout() {
     };
 
     const response = await fetch(
-      "http://localhost:8080/auth/realms/eshop/protocol/openid-connect/logout",
+      `http://${cloud_ip}:8080/auth/realms/eshop/protocol/openid-connect/logout`,
       requestOptions
     );
 

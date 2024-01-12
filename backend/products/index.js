@@ -35,7 +35,7 @@ const checkToken = (role) => async (req, res, next) => {
   const token_role =
     decodeToken.realm_access.roles[0] === "Customer"
       ? decodeToken.realm_access.roles[0]
-      : decodeToken.realm_access.roles[1];
+      : decodeToken.realm_access.roles[2];
 
   // Check if the user has at least one allowed role
   const hasAccess = role.includes(token_role);

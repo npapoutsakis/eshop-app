@@ -1,7 +1,7 @@
 // Seller functions
 import { decodeJwt, Logout } from "../utils/login";
 
-const url = "http://localhost:5000/api/products/";
+const url = "http://34.118.92.179:5000/api/products/";
 
 function isTokenExpired(expTimestamp) {
   const expDate = new Date(expTimestamp * 1000);

@@ -2,7 +2,7 @@
 
 import { Logout, decodeJwt } from "../utils/login.js";
 
-const url = "http://localhost:";
+const url = "http://34.118.92.179:";
 const orderPort = 5500;
 const productsPort = 5000;
 

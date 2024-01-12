@@ -35,7 +35,7 @@ const checkToken = (role) => async (req, res, next) => {
   const token_role =
     decodeToken.realm_access.roles[0] === "Customer"
       ? decodeToken.realm_access.roles[0]
-      : decodeToken.realm_access.roles[1];
+      : decodeToken.realm_access.roles[2];
 
   if (token_role !== role) {
     return res.status(401).json({ "Access Denied": "Not allowed!" });
