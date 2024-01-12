@@ -1,5 +1,5 @@
 FROM node:21
-WORKDIR /app
+WORKDIR /eshop-app/backend/products
 COPY package*.json ./
 RUN npm install
 COPY . .
