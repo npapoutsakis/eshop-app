@@ -25,26 +25,18 @@ TUC E-Shop is a full-stack e-commerce application built using React, Node.js, an
    cd eshop-app
    ```
 
-2. **Start the backend:**
-   Navigate to the backend directory and run:
+2. **Start the application:**
    ```bash
-   cd backend
    docker-compose up
    ```
 
-3. **Start the frontend:**
-   Open another terminal, navigate to the frontend directory and run:
-   ```bash
-   cd frontend
-   npm install
-   npm start
-   ```
-
-4. **Access the application:**
+3. **Access the application:**
    Open your browser and visit `http://localhost:3000` to view the application.
+
+4. **Stop the application:**
+   ```bash
+   docker-compose down
+   ```
 
 ## License
 This project is licensed under the MIT License.
-
-## Acknowledgments
-Thanks to all contributors and the open-source community.
